@@ -1,5 +1,4 @@
-import numpy as np
-
+from general import *
 
 def rotation_matrix(axis, theta):
     """
@@ -40,3 +39,15 @@ def random_n(n, mode='Rayleigh'):
         return rotate_by_theta(np.array(n), theta), nu
     else:
         print('error')
+
+
+def get_g(T):
+    '''returns g for T in K'''
+    return 2.6e-4 * (T / 1e4) ** -0.5
+
+
+def get_xout(xin, v, kin, kout, mu, T):
+    '''Equation 65'''
+    g = get_g(T)
+    vth = get_vth(T)
+    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth + g * (mu - 1)

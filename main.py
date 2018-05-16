@@ -34,7 +34,7 @@ while (d_absorbed < d.max()) & (i < N - 2):
     nu = get_nu(x=x, T=local_temperature)
     # Find the position of new scattering
     l, d = get_trajectory(p, k, d)
-    sf = get_survival_function(nu, l, d, k, grad_V=1.)
+    sf = get_survival_function(nu, l, d, k, grad_V=10.)
     d_absorbed = random_d(d, sf)
     p_new = get_shift(p, k, d_absorbed)
     k_new, mu = random_n(k)
@@ -54,8 +54,19 @@ while (d_absorbed < d.max()) & (i < N - 2):
     k_history[i + 1, :] = k_new
     x_history[i + 1] = x_new
 
+plt.subplot(221)
 plt.plot(p_history[:, 0], p_history[:, 2], lw=0.5)
 plt.scatter(p_history[:, 0], p_history[:, 2], c=x_history, cmap='spectral')
 # plt.scatter(p_history[:,0], p_history[:,2], c=np.arange(len(p_history)), cmap='spectral')
 plt.colorbar(label='Dimensionless frequency x')
+
+plt.subplot(222)
+plt.plot(p_history[:, 0], p_history[:, 2], lw=0.5)
+# plt.scatter(p_history[:, 0], p_history[:, 2], c=x_history, cmap='spectral')
+plt.scatter(p_history[:, 0], p_history[:, 2], c=np.arange(len(p_history)), cmap='spectral')
+plt.colorbar(label='Number of scattering')
+
+plt.subplot(223)
+plt.plot(x_history)
+# plt.scatter(p_history[:, 0], p_history[:, 2], c=x_history, cmap='spectral')
 plt.show()

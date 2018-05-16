@@ -23,18 +23,7 @@ def get_nu(x, T):
     return x * Deltanua + nua
 
 
-def get_g(T):
-    '''returns g for T in K'''
-    return 2.6e-4 * (T / 1e4) ** -0.5
-
-
 def get_vth(T):
     '''return vth in km/s for T in K'''
     return 0.1285 * np.sqrt(T)  # in km/s
 
-
-def get_xout(xin, v, kin, kout, mu, T):
-    '''Equation 65'''
-    g = get_g(T)
-    vth = get_vth(T)
-    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth + g * (mu - 1)
