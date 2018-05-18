@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 from lyamc.redistribution import *
 from lyamc.trajectory import *
 
@@ -67,12 +69,17 @@ print('Quads')
 
 from lyamc.coordinates import *
 
-nu = np.ones(2) * nua
-ns = np.zeros([2, 3])
+N = 10000
+nu = np.ones(N) * nua
+ns = np.zeros([N, 3])
 ns[:, 0] = 1
-vs = np.zeros([2, 3])
-vs[:, 0] = 0.001
-scattering_lab_frame(nu, ns, vs)
+vs = np.zeros([N, 3])
+vs[:, 0] = 100 / c
+res = scattering_lab_frame(nu, ns, vs)
+
+plt.hist(res[0] / nua, bins=100)
+plt.show()
+
 
 print('________________________')
 print('Picking an atom')

@@ -7,7 +7,7 @@ from lyamc.geometry import *
 
 
 def get_trajectory(x, n, d):
-    '''
+    ''' For given initial position, direction and displacements returns the trajectory.
     :param x: initial position
     :param n: direction
     :param d: coordinates along the chosen direction in pc
@@ -20,7 +20,6 @@ def get_trajectory(x, n, d):
 def get_shift(x, n, dd):
     l = np.array([x[0] + n[0] * dd, x[1] + n[1] * dd, x[2] + n[2] * dd])
     return l
-
 
 def get_survival_function(nu, l, d, k, grad_V):
     '''
@@ -37,7 +36,24 @@ def get_survival_function(nu, l, d, k, grad_V):
     return np.exp(-tau)
 
 
-def random_d(d, sf):
-    ''' Returns the distance traveled before scattering.
+def optimize_trajectory(d, sf):
     '''
-    return np.interp(np.random.rand(1)[0], sf[::-1], d[::-1])
+
+    :param d:
+    :param sf:
+    :return:
+    '''
+    good = True
+    d = np.interp(np.linspace(1, sf.min(), 100), sf[::-1], d[::-1])
+    return good, d
+
+def random_d(d, sf):
+    ''' Given the survival function returns the distance traveled before scattering.
+    '''
+    return np.interp(np.random.rand(), sf[::-1], d[::-1])
+
+
+def interp_d(d, sf, q):
+    ''' Given the survival function returns the distance traveled before scattering.
+    '''
+    return np.interp(q, sf[::-1], d[::-1])

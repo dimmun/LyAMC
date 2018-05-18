@@ -50,7 +50,7 @@ def get_xout(xin, v, kin, kout, mu, T):
     '''Equation 65'''
     g = get_g(T)
     vth = get_vth(T)
-    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth  # + g * (mu - 1)
+    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth + g * (mu - 1)
 
 
 def get_parallel_PDF(v, u, n, nu, T):
@@ -67,12 +67,13 @@ def get_parallel_PDF(v, u, n, nu, T):
 
 def get_par_velocity_of_atom(nu, T, u, n, N=100):
     '''
+    Generates a parallel component for the velocity of the atom.
 
-    :param nu:
-    :param T:
-    :param u:
-    :param n:
-    :return:
+    :param nu: frequency
+    :param T:  local gas temperature in K
+    :param u:  bulk gas evlocity
+    :param n:  photon direction
+    :return:   vector parallel to
     '''
     x = get_x(nu, T)
     DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
