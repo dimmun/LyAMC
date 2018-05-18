@@ -1,6 +1,6 @@
 from scipy.special import wofz
 
-from general import *
+from lyamc.general import *
 
 
 ### Voight profile functions:
@@ -26,14 +26,6 @@ def V(x, alpha, gamma):
 
     return np.real(wofz((x + 1j * gamma) / sigma / np.sqrt(2))) / sigma \
            / np.sqrt(2 * np.pi)
-
-
-def npsumdot(x, y):
-    '''Dot product for two arrays'''
-    if len(x.shape) > 1:
-        return np.sum(x * y, axis=1)
-    else:
-        return np.dot(x, y)
 
 
 def sigma(nu, T, u, k):

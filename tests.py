@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-
 from lyamc.redistribution import *
 from lyamc.trajectory import *
 
@@ -40,25 +38,62 @@ print('________________________')
 print('Single step test')
 
 ### Photon parameters:
-p = [0, 0, 0]  # position in pc
-x = 0.0  # dimensionless frequency
-k = random_n([], mode='uniform')  # normal vector
+# p = [0, 0, 0]  # position in pc
+# x = 0.0  # dimensionless frequency
+# k = random_n([], mode='uniform')  # normal vector
+#
+# local_temperature = temperature(p)
+# nu = get_nu(x=x, T=local_temperature)
+# # nu = 1.0
+#
+# d = np.linspace(0, 1, 1000)
+#
+# l, d = get_trajectory(p, k, d)
+# sf = get_survival_function(nu, l, d, k, grad_V=1e2)
+# plt.plot(d, sf)
+#
+# for i in range(10):
+#     d_absorbed = random_d(d, sf)
+#     print(d_absorbed)
+#     plt.scatter(d_absorbed, 0)
+#
+# plt.xlabel('Coordinate in [pc]')
+# plt.ylabel('Velocity in [km/s]')
+# plt.show()
 
-local_temperature = temperature(p)
-nu = get_nu(x=x, T=local_temperature)
-# nu = 1.0
 
-d = np.linspace(0, 1, 1000)
+print('________________________')
+print('Quads')
 
-l, d = get_trajectory(p, k, d)
-sf = get_survival_function(nu, l, d, k, grad_V=1e2)
-plt.plot(d, sf)
+from lyamc.coordinates import *
 
-for i in range(10):
-    d_absorbed = random_d(d, sf)
-    print(d_absorbed)
-    plt.scatter(d_absorbed, 0)
+nu = np.ones(2) * nua
+ns = np.zeros([2, 3])
+ns[:, 0] = 1
+vs = np.zeros([2, 3])
+vs[:, 0] = 0.001
+scattering_lab_frame(nu, ns, vs)
 
-plt.xlabel('Coordinate in [pc]')
-plt.ylabel('Velocity in [km/s]')
-plt.show()
+print('________________________')
+print('Picking an atom')
+
+N = 10000
+v = np.zeros([N, 3])
+v[:, 0] = np.linspace(-1000, 1000, N)
+u = np.zeros([N, 3])
+u[:, 0] = -200.
+n = np.zeros([N, 3])
+n[:, 0] = 1
+nu = 1. * nua
+T = 1e4
+
+u = np.array([-2000, 0, 0])
+n = np.array([1., 0., 0])
+
+vx = np.zeros([N, 3])
+
+for i in range(N):
+    vx[i, :] = u + get_par_velocity_of_atom(nu, T, u, n, N=100) + get_perp_velocity_of_atom(nu, T, u, n)
+
+print(vx.mean(0))
+print(vx.std(0))

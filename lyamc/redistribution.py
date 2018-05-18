@@ -1,4 +1,4 @@
-from general import *
+from lyamc.general import *
 
 def rotation_matrix(axis, theta):
     """
@@ -25,7 +25,7 @@ def rotate_by_theta(n, theta):
 
 
 def random_n(n, mode='Rayleigh'):
-    ''' Returns the new direction for the photon
+    ''' Returns a new direction for the photon
     '''
     if mode == 'uniform':
         x = np.random.normal(size=(3))
@@ -50,4 +50,52 @@ def get_xout(xin, v, kin, kout, mu, T):
     '''Equation 65'''
     g = get_g(T)
     vth = get_vth(T)
-    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth + g * (mu - 1)
+    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth  # + g * (mu - 1)
+
+
+def get_parallel_PDF(v, u, n, nu, T):
+    v_par = npsumdot(v, n)
+    u_par = npsumdot(u, n)
+    x = get_x(nu, T)
+    DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
+    a = DeltanuL / 2. / DeltanuD
+    # return 1. / ((x - v_par/c)**2 + a**2)
+    return 1. / np.sqrt(np.pi * mp_over_2kB / T) * np.exp(- mp_over_2kB / T * (v_par - u_par) ** 2), a ** 2 / (
+    (x - v_par / c) ** 2 + a ** 2)
+    # return np.exp( - mp_over_2kB / T * (v_par-u_par)**2) / ((x - v_par/c)**2 + a**2)
+
+
+def get_par_velocity_of_atom(nu, T, u, n, N=100):
+    '''
+
+    :param nu:
+    :param T:
+    :param u:
+    :param n:
+    :return:
+    '''
+    x = get_x(nu, T)
+    DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
+    a = DeltanuL / 2. / DeltanuD
+    v_par = np.random.normal(loc=0, scale=1. / np.sqrt(2 * mp_over_2kB / T), size=N)
+    r = np.random.rand(N)
+    temp = a ** 2 / ((x - (np.dot(u, n) + v_par) / c) ** 2 + a ** 2)
+    if temp.max() < 10. / N:
+        temp /= temp.max()
+    r = r < temp
+    return n * v_par[r][0]
+
+
+def get_perp_velocity_of_atom(nu, T, u, n):
+    '''
+
+    :param nu:
+    :param T:
+    :param u:
+    :param n:
+    :return:
+    '''
+    v_perp = np.random.normal(loc=0, scale=1. / np.sqrt(2 * mp_over_2kB / T), size=2)
+    direction0 = rotate_by_theta(n, np.pi / 2)
+    direction1 = np.cross(direction0, n)
+    return v_perp[0] * direction0 + v_perp[1] * direction1

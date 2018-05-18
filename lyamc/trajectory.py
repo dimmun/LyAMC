@@ -2,8 +2,8 @@
 Routines for determining the trajectory of the photon
 '''
 
-from atomic import *
-from geometry import *
+from lyamc.atomic import *
+from lyamc.geometry import *
 
 
 def get_trajectory(x, n, d):

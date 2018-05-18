@@ -8,6 +8,17 @@ c = 2.99792e5  # km/s
 DeltanuL = 99471839.  # natural line width in Hz
 sigmat = 6.65e-25  # cm^2
 
+# https://www.wolframalpha.com/input/?i=(proton+mass+%2F+2)+%2F+(Bolzmann+constant)+in+s%5E2*K%2Fkm%5E2
+mp_over_2kB = 60.57  # s^2 K / km^2
+
+
+def npsumdot(x, y):
+    '''Dot product for two arrays'''
+    if len(x.shape) > 1:
+        return np.sum(x * y, axis=1)
+    else:
+        return np.dot(x, y)
+
 
 def get_x(nu, T):
     '''returns dimensionless frequency for nu in Hz and T in K'''
