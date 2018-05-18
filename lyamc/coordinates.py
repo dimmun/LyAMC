@@ -1,6 +1,5 @@
 import numpy as np
 
-
 # Pauli matrices
 id_m = np.identity(2).reshape(1, 2, 2)
 S_x = np.array(((0, 1), (1, 0))).reshape(1, 2, 2)
@@ -134,7 +133,7 @@ def boost_q(ein, qin, vb):
 
     # Boost quaternion
     qb = vs_to_quat(vb)
-    qout = np.matmul(qin + qb, np.linalg.inv(1.0 - np.matmul(qb, qin)))
+    qout = np.matmul(qin + qb, np.linalg.inv(id_m - np.matmul(qb, qin)))
 
     return eout, qout
 
