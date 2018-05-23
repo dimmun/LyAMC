@@ -10,9 +10,6 @@ args = parser.parse_args()
 
 print(args.geometry)
 
-import string
-import random
-
 from lyamc.redistribution import *
 from lyamc.trajectory import *
 from lyamc.coordinates import *
@@ -118,6 +115,6 @@ while (d_absorbed < d.max()) & (i < N - 2):
         i = i - 1
 
 print(i)
-filename = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+filename = str(np.random.rand())[2:]
 np.savez('output/%s.npz' % filename, p=p_history[:i + 2], k=k_history[:i + 2], x=x_history[:i + 2])
 np.savez('output/last_%s.npz' % filename, p=p_history[i + 1, :], k=k_history[i + 1, :], x=x_history[i + 1])

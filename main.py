@@ -3,7 +3,6 @@ import os
 from multiprocessing import Pool
 
 import matplotlib.pyplot as plt
-import numpy as np
 
 from lyamc.general import *
 
@@ -14,8 +13,8 @@ def f(x):
     os.system('python runner.py Zheng_sphere 1. 2e4 3.3 0.0 0.0 100.0')
 
 
-p = Pool(4)
-print(p.map(f, np.arange(100)))
+p = Pool(32)
+print(p.map(f, np.arange(3200)))
 
 
 s = glob.glob('output/last_*')
