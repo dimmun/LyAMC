@@ -16,7 +16,7 @@ def f(x):
 
 
 p = Pool(28)
-print(p.map(f, np.arange(3200)))
+print(p.map(f, np.arange(320)))
 
 
 s = glob.glob('output/last_*')

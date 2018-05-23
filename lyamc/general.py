@@ -22,7 +22,7 @@ def decodename(geom, params, sep='_'):
         geom, params[0], params[1], params[2], params[3], params[4], params[5])
     else:
         s = '%s %0.2f %.1e %0.2f' % (geom, params[0], params[1], params[2])
-    s.replace(' ', sep)
+    s = s.replace(' ', sep)
     return s
 
 
