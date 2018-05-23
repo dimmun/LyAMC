@@ -16,6 +16,16 @@ sigmat = 6.65e-25  # cm^2
 mp_over_2kB = 60.57  # s^2 K / km^2
 
 
+def decodename(geom, params, sep='_'):
+    if len(params) == 6:
+        s = '%s %0.2f %.1e %0.2f %0.2f %0.2f %0.2f' % (
+        geom, params[0], params[1], params[2], params[3], params[4], params[5])
+    else:
+        s = '%s %0.2f %.1e %0.2f' % (geom, params[0], params[1], params[2])
+    s.replace(' ', sep)
+    return s
+
+
 def npsumdot(x, y):
     '''Dot product for two arrays'''
     if len(x.shape) > 1:

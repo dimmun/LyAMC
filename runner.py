@@ -116,5 +116,7 @@ while (d_absorbed < d.max()) & (i < N - 2):
 
 print(i)
 filename = str(np.random.rand())[2:]
-np.savez('output/%s.npz' % filename, p=p_history[:i + 2], k=k_history[:i + 2], x=x_history[:i + 2])
-np.savez('output/last_%s.npz' % filename, p=p_history[i + 1, :], k=k_history[i + 1, :], x=x_history[i + 1])
+np.savez('output/' + decodename(args.geometry, args.params) + '_%s.npz' % filename, p=p_history[:i + 2],
+         k=k_history[:i + 2], x=x_history[:i + 2])
+np.savez('output/' + decodename(args.geometry, args.params) + '_%s_last.npz' % filename, p=p_history[i + 1, :],
+         k=k_history[i + 1, :], x=x_history[i + 1])

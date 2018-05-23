@@ -6,14 +6,16 @@ import matplotlib.pyplot as plt
 
 from lyamc.general import *
 
-os.system('rm output/*')
+os.system('rm output/* -f')
 
+geom = 'Zheng_sphere'
+params = [1., 2e4, 3.3, 0.5, 0.0, 0.0]
 
 def f(x):
-    os.system('python runner.py Zheng_sphere 1. 2e4 3.3 0.0 0.0 100.0')
+    os.system('python runner.py ' + decodename(geom, params, sep=' '))
 
 
-p = Pool(32)
+p = Pool(28)
 print(p.map(f, np.arange(3200)))
 
 
@@ -30,11 +32,24 @@ x = np.array(x)
 k = np.array(k)
 direction = npsumdot(k, [0, 0, 1])
 filt = np.abs(direction) < 0.1
-# filt = np.abs(direction)>0.9
+# filt = (direction) < -0.9
 
-plt.hist(x[filt], bins=np.linspace(-20, 20, 21))
+# filt = direction>-2
+
+plt.hist(direction, 32, normed=True, histtype='step')
+
+plt.show()
+
+filt = (direction) > -2
+plt.hist(x[filt], bins=np.linspace(-20, 20, 801), normed=True, histtype='step', cumulative=True)
+filt = (direction) < -0.5
+plt.hist(x[filt], bins=np.linspace(-20, 20, 801), normed=True, histtype='step', cumulative=True)
+filt = (direction) > 0.5
+plt.hist(x[filt], bins=np.linspace(-20, 20, 801), normed=True, histtype='step', cumulative=True)
 # plt.yscale('log')
 plt.show()
+
+
 
 # # Making plots
 # plt.figure()
