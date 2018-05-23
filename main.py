@@ -1,13 +1,22 @@
 import glob
 import os
+from multiprocessing import Pool
 
 import matplotlib.pyplot as plt
 import numpy as np
 
+from lyamc.general import *
+
 os.system('rm output/*')
 
-for i in range(100):
-    os.system('python runner.py Zheng_sphere 1. 2e4 10.')
+
+def f(x):
+    os.system('python runner.py Zheng_sphere 1. 2e4 3.3 0.0 0.0 100.0')
+
+
+p = Pool(4)
+print(p.map(f, np.arange(100)))
+
 
 s = glob.glob('output/last_*')
 
@@ -18,7 +27,14 @@ for si in s:
     k.append(temp['k'])
     x.append(temp['x'])
 
-plt.hist(x)
+x = np.array(x)
+k = np.array(k)
+direction = npsumdot(k, [0, 0, 1])
+filt = np.abs(direction) < 0.1
+# filt = np.abs(direction)>0.9
+
+plt.hist(x[filt], bins=np.linspace(-20, 20, 21))
+# plt.yscale('log')
 plt.show()
 
 # # Making plots

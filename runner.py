@@ -26,7 +26,10 @@ if args.geometry[0] == 'plane_gradient':
 elif args.geometry[0] == 'Zheng_sphere':
     geom = Zheng_sphere(nbar=args.params[0],
                         T=args.params[1],
-                        R=args.params[2])
+                        R=args.params[2],
+                        A=args.params[3],
+                        V=args.params[4],
+                        DeltaV=args.params[5])
 else:
     print('define a proper geometry')
 ### Photon parameters:
@@ -111,6 +114,8 @@ while (d_absorbed < d.max()) & (i < N - 2):
         p_history[i + 1, :] = p_new
         k_history[i + 1, :] = k_new
         x_history[i + 1] = x_new
+    else:
+        i = i - 1
 
 print(i)
 filename = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
