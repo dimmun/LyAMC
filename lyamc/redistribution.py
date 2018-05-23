@@ -30,7 +30,7 @@ def random_n(n, mode='Rayleigh'):
     if mode == 'uniform':
         x = np.random.normal(size=(3))
         x /= np.sqrt(x[0] ** 2 + x[1] ** 2 + x[2] ** 2)
-        return x
+        return x, 1
     elif mode == 'Rayleigh':
         r = np.random.rand()
         q = ((16. * r * r - 16 * r + 5.) ** 0.5 - 4. * r + 2.) ** (1. / 3.)

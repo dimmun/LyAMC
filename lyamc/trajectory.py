@@ -21,7 +21,8 @@ def get_shift(x, n, dd):
     l = np.array([x[0] + n[0] * dd, x[1] + n[1] * dd, x[2] + n[2] * dd])
     return l
 
-def get_survival_function(nu, l, d, k, grad_V):
+
+def get_survival_function(nu, l, d, k, geom):
     '''
     Generates survival function
     :param nu: frequency of the photon in rest frame
@@ -31,7 +32,7 @@ def get_survival_function(nu, l, d, k, grad_V):
     :param grad_V:
     :return:
     '''
-    tau_d = DtauDl(k=k, nu=nu, v=velocity(l, grad_V=grad_V), T=temperature(l), ndens=density(l))
+    tau_d = DtauDl(k=k, nu=nu, v=geom.velocity(l), T=geom.temperature(l), ndens=geom.density(l))
     tau = np.cumsum(tau_d * np.gradient(d))  # replace with cumtrapz
     return np.exp(-tau)
 

@@ -1,17 +1,18 @@
+import matplotlib.pyplot as plt
 import numpy as np
+
 import lyamc.cons as cons
 import lyamc.coordinates as coord
-import matplotlib.pyplot as plt
 
 # Eq. (65) can be written as \Delta \nu/\nu_0 = (v/c).(k_out - k_in) + (h \nu_0/m_p c^2)(\mu - 1)
 # The following code checks this
 
 # Number of scatterings
-N = 1000000
+N = 100000
 
 # Nu_Lyman alpha in units of Hydrogen mass
 NU0 = cons.NULYA / (cons.MHK * cons.K2HZ)
-T = 1.0e+2                      # Temperature in K
+T = 1.0e+4  # Temperature in K
 sigma = np.sqrt(T / cons.MHK)   # Standard deviation of a single velocity component in units of c
                                 # Numerically, for our parameters, sigma = 3E-6
 
@@ -39,4 +40,6 @@ plt.hist(drecoil, bins=100)
 
 # The residuals are consistent with being O(v_th^2/c^2 = sigma^2)
 
+from lyamc.general import *
 
+get_x(freqs_in, T)

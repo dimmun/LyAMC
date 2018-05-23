@@ -68,39 +68,85 @@ print('________________________')
 print('Quads')
 
 from lyamc.coordinates import *
+import lyamc.cons as cons
 
-N = 10000
-nu = np.ones(N) * nua
+m_hz = cons.MHK * cons.K2HZ
+NU0 = cons.NULYA / (cons.MHK * cons.K2HZ)
+
+N = 100000
+nu = np.ones(N) * NU0 / m_hz
 ns = np.zeros([N, 3])
 ns[:, 0] = 1
 vs = np.zeros([N, 3])
-vs[:, 0] = 100 / c
+vs[:, 0] = 1e-4
 res = scattering_lab_frame(nu, ns, vs)
 
-plt.hist(res[0] / nua, bins=100)
+plt.hist(res[0] * m_hz / NU0 - 1., bins=100)
 plt.show()
 
+####
 
-print('________________________')
-print('Picking an atom')
-
-N = 10000
-v = np.zeros([N, 3])
-v[:, 0] = np.linspace(-1000, 1000, N)
-u = np.zeros([N, 3])
-u[:, 0] = -200.
-n = np.zeros([N, 3])
-n[:, 0] = 1
-nu = 1. * nua
+N = 1000
 T = 1e4
+vth = get_vth(T)
 
-u = np.array([-2000, 0, 0])
-n = np.array([1., 0., 0])
+nu = np.ones(N) * nua / m_hz
+ns = np.zeros([N, 3])
+ns[:, 0] = 1
+# vs = np.zeros([N, 3])
+vs = np.random.normal(loc=0., scale=np.sqrt(T / mp_over_2kB * 2), size=[N, 3]) / c
+res = scattering_lab_frame(nu, ns, vs)
 
-vx = np.zeros([N, 3])
+x = get_x(res[0] * m_hz, T)
+np.median(x)
 
-for i in range(N):
-    vx[i, :] = u + get_par_velocity_of_atom(nu, T, u, n, N=100) + get_perp_velocity_of_atom(nu, T, u, n)
+t1 = npsumdot(ns, vs) / vth * c
+t2 = npsumdot(res[1], vs) / vth * c
 
-print(vx.mean(0))
-print(vx.std(0))
+delta = (res[0] - nu) / nu
+
+print(np.mean(delta - np.sum(vs * (res[1] - ns), axis=-1)))
+
+print(np.mean(x + t1 - t2), np.std(x + t1 - t2))
+
+plt.hist(x + t1 - t2, bins=100)
+plt.show()
+
+####
+
+nu = np.ones(1) * nua / m_hz
+
+ns = np.zeros([1, 3])
+ns[0] = 1
+ns = ns.reshape(1, -1)
+
+vs = np.zeros([1, 3])
+vs[0] = 100 / c
+vs = vs.reshape(1, -1)
+
+res = scattering_lab_frame(nu, ns, vs)
+
+
+# print('________________________')
+# print('Picking an atom')
+#
+# N = 10000
+# v = np.zeros([N, 3])
+# v[:, 0] = np.linspace(-1000, 1000, N)
+# u = np.zeros([N, 3])
+# u[:, 0] = -200.
+# n = np.zeros([N, 3])
+# n[:, 0] = 1
+# nu = 1. * nua
+# T = 1e4
+#
+# u = np.array([-2000, 0, 0])
+# n = np.array([1., 0., 0])
+#
+# vx = np.zeros([N, 3])
+#
+# for i in range(N):
+#     vx[i, :] = u + get_par_velocity_of_atom(nu, T, u, n, N=100) + get_perp_velocity_of_atom(nu, T, u, n)
+#
+# print(vx.mean(0))
+# print(vx.std(0))

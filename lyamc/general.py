@@ -1,9 +1,13 @@
 import numpy as np
 
+import lyamc.cons as cons
+
+NU0 = cons.NULYA / (cons.MHK * cons.K2HZ)
+
 ### Consts
 km_in_pc = 3.086e+13
 cm_in_pc = 3.086e+18
-nua = 2.47e15  # Hz
+nua = cons.NULYA  # Hz
 c = 2.99792e5  # km/s
 DeltanuL = 99471839.  # natural line width in Hz
 sigmat = 6.65e-25  # cm^2
