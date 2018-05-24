@@ -1,3 +1,5 @@
+import glob
+
 import numpy as np
 
 import lyamc.cons as cons
@@ -14,6 +16,21 @@ sigmat = 6.65e-25  # cm^2
 
 # https://www.wolframalpha.com/input/?i=(proton+mass+%2F+2)+%2F+(Bolzmann+constant)+in+s%5E2*K%2Fkm%5E2
 mp_over_2kB = 60.57  # s^2 K / km^2
+
+
+def read_last(geom, params):
+    s = glob.glob('output/' + decodename(geom, params, sep='_') + '*last*npz')
+    k = []
+    x = []
+    for si in s:
+        temp = np.load(si)
+        k.append(temp['k'])
+        x.append(temp['x'])
+    x = np.array(x)
+    k = np.array(k)
+    direction = npsumdot(k, [0, 0, 1])
+    print(len(s))
+    return x, k, direction
 
 
 def decodename(geom, params, sep='_'):

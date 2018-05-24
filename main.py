@@ -1,6 +1,4 @@
-import glob
 import os
-from multiprocessing import Pool
 
 import matplotlib.pyplot as plt
 
@@ -8,12 +6,12 @@ from lyamc.general import *
 
 # os.system('rm output/* -f')
 
-p = Pool(28)
+# p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.3, 0.0, 0.0, 100.0]
-N_per_node = 28 * 100
-N_nodes = 10
+params = [1., 2e4, 3.3, 0.0, 0.0, 200.0]
+N_per_node = 28 * 300
+N_nodes = 15
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
@@ -35,20 +33,6 @@ for i in range(N_nodes):
     os.system("sbatch temp.sh")
 
 
-def read_last(geom, params):
-    s = glob.glob('output/' + decodename(geom, params, sep='_') + '*last*')
-    k = []
-    x = []
-    for si in s:
-        temp = np.load(si)
-        k.append(temp['k'])
-        x.append(temp['x'])
-    x = np.array(x)
-    k = np.array(k)
-    direction = npsumdot(k, [0, 0, 1])
-    print(len(s))
-    return x, k, direction
-
 
 ###
 
@@ -69,7 +53,12 @@ plt.show()
 geom = 'Zheng_sphere'
 params = [1., 2e4, 3.3, 0.0, 0.0, 100.0]
 x, k, direction = read_last(geom, params=params)
-t = plt.hist(direction, 16, normed=True, histtype='step')
+t = plt.hist(direction, 32, normed=True, histtype='step')
+
+geom = 'Zheng_sphere'
+params = [1., 2e4, 3.3, 0.0, 0.0, 50.0]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(direction, 32, normed=True, histtype='step')
 
 plt.show()
 
@@ -80,12 +69,12 @@ filt = np.abs(direction) < 0.1
 # filt = direction>-2
 plt.show()
 
-# filt = (direction) > -2
+filt = (direction) > -2
+plt.hist(x[filt], bins=np.linspace(-20, 20, 81), normed=True, histtype='step', cumulative=False)
+# filt = (direction) < -0.8
 # plt.hist(x[filt], bins=np.linspace(-20, 20, 81), normed=True, histtype='step', cumulative=False)
-filt = (direction) < -0.8
-plt.hist(x[filt], bins=np.linspace(-20, 20, 81), normed=True, histtype='step', cumulative=False)
-filt = (direction) > 0.8
-plt.hist(x[filt], bins=np.linspace(-20, 20, 81), normed=True, histtype='step', cumulative=False)
+# filt = (direction) > 0.8
+# plt.hist(x[filt], bins=np.linspace(-20, 20, 81), normed=True, histtype='step', cumulative=False)
 # plt.yscale('log')
 plt.show()
 

@@ -21,7 +21,7 @@ params = args.params
 
 
 def f(x):
-    os.system('python runner.py ' + decodename(geom, params, sep=' '))
+    os.system('python runner.py 100 ' + decodename(geom, params, sep=' '))
     return 0
 
 
