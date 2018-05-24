@@ -9,8 +9,8 @@ from lyamc.general import *
 geom = 'Zheng_sphere'
 params = [1., 2e4, 3.3, 0.5, 0.0, 0.0]
 N_per_node = 28
-N_per_proc = 100
-N_nodes = 30
+N_per_proc = 1000
+N_nodes = 50
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
@@ -76,7 +76,7 @@ t = plt.hist(direction, 32, normed=True, histtype='step', label='0.25')
 geom2 = 'Zheng_sphere'
 params2 = [1., 2e4, 3.3, 0.5, 0.0, 0.0]
 x, k, direction = read_last(geom2, params=params2)
-t = plt.hist(direction, 32, normed=True, histtype='step', label='0.50')
+t = plt.hist(direction, 64, normed=True, histtype='step', label='0.50')
 
 plt.legend(loc=3)
 plt.show()
