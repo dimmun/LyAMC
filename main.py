@@ -7,10 +7,10 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.3, 0.25, 0.0, 0.0]
+params = [1., 2e4, 3.3, 0.5, 0.0, 0.0]
 N_per_node = 28
-N_per_proc = 500
-N_nodes = 10
+N_per_proc = 100
+N_nodes = 30
 
 s = """#!/bin/bash
 #SBATCH --nodes=1

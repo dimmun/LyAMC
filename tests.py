@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+from lyamc.atomic import *
 from lyamc.redistribution import *
 from lyamc.trajectory import *
 
@@ -22,6 +23,30 @@ print('_________________________')
 # plt.legend()
 # plt.show()
 
+
+print('_________________________')
+
+from scipy import integrate
+
+
+def Voigt(a, x):
+    I = integrate.quad(lambda y: np.exp(-y ** 2) / (a ** 2 + (x - y) ** 2), -np.inf, np.inf, limit=1000)[0]
+    return (a / np.pi ** 1.5) * I
+
+
+a = 0.1
+
+x = np.linspace(-10, 10, 1000)
+res = np.array([Voigt(a, u) for u in x])
+
+np.trapz(res, x)
+
+np.trapz(V(x, alpha=1 / np.sqrt(2.), gamma=a), x)
+
+plt.plot(x, res, label='integral')
+plt.plot(x, V(x, alpha=1., gamma=a), label='code')
+plt.legend()
+plt.show()
 
 print('Cross section at line center, T=1e4K, no relative velocity')
 

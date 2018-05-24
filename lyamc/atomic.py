@@ -22,10 +22,8 @@ def V(x, alpha, gamma):
     and Gaussian component HWHM alpha.
 
     """
-    sigma = alpha / np.sqrt(2 * np.log(2))
-
-    return np.real(wofz((x + 1j * gamma) / sigma / np.sqrt(2))) / sigma \
-           / np.sqrt(2 * np.pi)
+    sigma = alpha / np.sqrt(2)
+    return np.real(wofz((x + 1j * gamma) / sigma / np.sqrt(2))) / sigma / np.sqrt(2 * np.pi)
 
 
 def sigma(nu, T, u, k):
@@ -42,7 +40,7 @@ def sigma(nu, T, u, k):
     vth = get_vth(T)
     Deltanua = nua * vth / c
     a = DeltanuL / 2.0 / Deltanua
-    return 1.045e-13 * (T / 1e4) ** -0.5 * V(x_new, alpha=2. ** -0.5, gamma=a)
+    return 1.045e-13 * (T / 1e4) ** -0.5 * V(x_new, alpha=1., gamma=a)
 
 
 def DtauDl(k, nu, v, T, ndens):
