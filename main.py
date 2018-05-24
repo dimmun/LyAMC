@@ -9,7 +9,7 @@ from lyamc.general import *
 geom = 'Zheng_sphere'
 params = [1., 2e4, 3.3, 0.5, 0.0, 0.0]
 N_per_node = 28
-N_per_proc = 1000
+N_per_proc = 300
 N_nodes = 50
 
 s = """#!/bin/bash
