@@ -1,5 +1,3 @@
-import os
-
 import matplotlib.pyplot as plt
 
 from lyamc.general import *
@@ -9,9 +7,10 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.3, 0.0, 0.0, 200.0]
-N_per_node = 28 * 300
-N_nodes = 15
+params = [1., 2e4, 3.3, 0.25, 0.0, 0.0]
+N_per_node = 28
+N_per_proc = 500
+N_nodes = 10
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
@@ -23,10 +22,18 @@ s = """#!/bin/bash
 
 conda activate cfastpm
 
-python node_runner.py %i """ % N_per_node
+"""
+
+for i in range(N_per_node):
+    s = s + """python runner.py %i """ % N_per_proc + decodename(geom, params, sep=' ') + """ &
+"""
+
+s += """wait
+
+"""
 
 file = open("temp.sh", "w")
-file.write(s + decodename(geom, params, sep=' '))
+file.write(s)
 file.close()
 
 for i in range(N_nodes):
@@ -37,15 +44,41 @@ for i in range(N_nodes):
 ###
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.3, 0.25, 0.0, 0.0]
+params = [1., 2e4, 3.3, 0.0, 0.0, 200.0]
 x, k, direction = read_last(geom, params=params)
-t = plt.hist(direction, 16, normed=True, histtype='step')
+t = plt.hist(direction, 16, normed=True, histtype='step', label='200')
+
+geom2 = 'Zheng_sphere'
+params2 = [1., 2e4, 3.3, 0.0, 0.0, 100.0]
+x, k, direction = read_last(geom2, params=params2)
+t = plt.hist(direction, 16, normed=True, histtype='step', label='100')
+
+geom2 = 'Zheng_sphere'
+params2 = [1., 2e4, 3.3, 0.0, 0.0, 50.0]
+x, k, direction = read_last(geom2, params=params2)
+t = plt.hist(direction, 16, normed=True, histtype='step', label='50')
+
+plt.legend()
+plt.show()
+
+###
+
+geom = 'Zheng_sphere'
+params = [1., 2e4, 3.3, 0.0, 0.0, 0.0]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(direction, 32, normed=True, histtype='step', label='0.00')
+
+geom2 = 'Zheng_sphere'
+params2 = [1., 2e4, 3.3, 0.25, 0.0, 0.0]
+x, k, direction = read_last(geom2, params=params2)
+t = plt.hist(direction, 32, normed=True, histtype='step', label='0.25')
 
 geom2 = 'Zheng_sphere'
 params2 = [1., 2e4, 3.3, 0.5, 0.0, 0.0]
 x, k, direction = read_last(geom2, params=params2)
-t = plt.hist(direction, 16, normed=True, histtype='step')
+t = plt.hist(direction, 32, normed=True, histtype='step', label='0.50')
 
+plt.legend(loc=3)
 plt.show()
 
 ###

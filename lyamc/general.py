@@ -1,4 +1,5 @@
 import glob
+import os
 
 import numpy as np
 
@@ -20,16 +21,26 @@ mp_over_2kB = 60.57  # s^2 K / km^2
 
 def read_last(geom, params):
     s = glob.glob('output/' + decodename(geom, params, sep='_') + '*last*npz')
-    k = []
-    x = []
-    for si in s:
+    temp = np.load(s[0])
+    k = temp['k'].copy()
+    x = temp['x'].copy()
+    p = temp['p'].copy()
+    for si in s[1:]:
         temp = np.load(si)
-        k.append(temp['k'])
-        x.append(temp['x'])
-    x = np.array(x)
-    k = np.array(k)
+        k = np.concatenate([k, temp['k']])
+        x = np.concatenate([x, temp['x']])
+        p = np.concatenate([p, temp['p']])
+    # x = np.array(x).reshape(-1,1)
+    # k = np.array(k).reshape(-
+    filename = str(np.random.rand())[2:]
+    np.savez('output/' + decodename(geom, params) + '_%s_last.npz' % filename,
+             p=p,
+             k=k,
+             x=x)
+    for si in s:
+        os.system('rm -f ' + si)
     direction = npsumdot(k, [0, 0, 1])
-    print(len(s))
+    print(len(x))
     return x, k, direction
 
 

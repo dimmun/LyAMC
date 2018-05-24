@@ -41,7 +41,7 @@ x_last = []
 for iii in range(nsim):
     p = [0, 0, 0]  # position in pc
     k, temp = random_n([], mode='uniform')  # normal vector
-    x = 0.
+    x = np.random.normal(0, 1)
 
     N = 1000
 
