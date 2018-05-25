@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
-import lyamc.cons as cons
 import lyamc.coordinates as coord
+from lyamc.general import *
 
 # Eq. (65) can be written as \Delta \nu/\nu_0 = (v/c).(k_out - k_in) + (h \nu_0/m_p c^2)(\mu - 1)
 # The following code checks this
@@ -26,6 +25,10 @@ vs = np.random.randn(N, 3) * sigma
 # Perform scattering
 freqs_out, ns_out = coord.scattering_lab_frame(freqs_in, ns_in, vs)
 
+m_hz = 2.2687318181383202e+23
+
+x_in = get_x(freqs_in * m_hz, T)
+x_out = get_x(freqs_out * m_hz, T)
 # Fractional change in energy
 delta = (freqs_out - freqs_in) / freqs_in
 
@@ -36,10 +39,14 @@ recoil = delta - np.sum(vs * (ns_out - ns_in), axis=-1)
 drecoil = recoil - NU0 * (np.sum(ns_out * ns_in, axis=-1) - 1)
 
 plt.hist(recoil, bins=100)
-plt.hist(drecoil, bins=100)
+# plt.hist(drecoil, bins=100)
 
+plt.show()
 # The residuals are consistent with being O(v_th^2/c^2 = sigma^2)
 
-from lyamc.general import *
+from lyamc.redistribution import *
 
-get_x(freqs_in, T)
+# k_new, mu = random_n(k)
+
+plt.hist([get_xout(x_in, vs * 0, [1, 0, 0], [0, 1, 0], 1, T), x_out], 100)
+plt.show()

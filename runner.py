@@ -59,12 +59,12 @@ for iii in range(nsim):
     d_absorbed = 0
     d = np.linspace(0, 10, 100000)
 
-
-    proper_redistribution = True
+    proper_redistribution = False  # True
 
     i = -1
 
     while (d_absorbed < d.max()) & (i < N - 2):
+        print(i, x)
         i += 1
         # define initial parameters
         p = p_history[i, :].copy()  # position
@@ -109,9 +109,10 @@ for iii in range(nsim):
                 # print(x_new - x - np.sum(vs * (res[1] - ns), axis=-1)/vth*c)
             else:
                 k_new, mu = random_n(k)  # , mode='uniform')  # new direction
+                print(k, k_new)
                 x_new_in = get_x(nu, local_temperature_new)
                 x_new = get_xout(xin=x_new_in,
-                                 v=local_velocity_new,
+                                 v=v_atom,
                                  kin=k,
                                  kout=k_new,
                                  mu=mu,

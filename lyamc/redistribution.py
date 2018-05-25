@@ -39,7 +39,7 @@ def random_n(n, mode='Rayleigh'):
         q = ((16. * r * r - 16 * r + 5.) ** 0.5 - 4. * r + 2.) ** (1. / 3.)
         nu = 1. / q - q
         theta = np.arccos(nu)
-        return rotate_by_theta(np.array(n), theta), nu
+        return rotate_by_theta(np.array(n).copy(), theta), nu
     else:
         print('error')
 
