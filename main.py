@@ -7,7 +7,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.24, 0.00, 0.0, 200.0]
+params = [1., 2e4, 3.24, 0.50, 0.0, 0.0]
 N_per_node = 28
 N_per_proc = 100
 N_nodes = 50

@@ -57,7 +57,7 @@ for iii in range(nsim):
     x_history[0] = x
 
     d_absorbed = 0
-    d = np.linspace(0, 10, 1000)
+    d = np.linspace(0, 10, 10000)
 
 
     proper_redistribution = True
