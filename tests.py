@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 
-from lyamc.atomic import *
 from lyamc.redistribution import *
 from lyamc.trajectory import *
 
@@ -47,6 +46,23 @@ plt.plot(x, res, label='integral')
 plt.plot(x, V(x, alpha=1., gamma=a), label='code')
 plt.legend()
 plt.show()
+
+####
+
+
+t = []
+for i in range(10000):
+    t.append(get_par_velocity_of_atom(nua, 2e4, np.array([-200., 0, 0]), np.array([1., 0, 0]), N=1000))
+
+t = np.array(t)[:, 0]
+print(t.mean())
+plt.hist(t, 32)
+plt.show()
+
+####
+
+
+
 
 print('Cross section at line center, T=1e4K, no relative velocity')
 

@@ -7,7 +7,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.3, 0.5, 0.0, 0.0]
+params = [1., 2e4, 3.24, 0.00, 0.0, 200.0]
 N_per_node = 28
 N_per_proc = 300
 N_nodes = 50
@@ -44,19 +44,19 @@ for i in range(N_nodes):
 ###
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.3, 0.0, 0.0, 200.0]
+params = [1., 2e4, 3.24, 0.0, 0.0, 200.0]
 x, k, direction = read_last(geom, params=params)
-t = plt.hist(direction, 16, normed=True, histtype='step', label='200')
+t = plt.hist(direction, 64, normed=True, histtype='step', label='200')
 
 geom2 = 'Zheng_sphere'
-params2 = [1., 2e4, 3.3, 0.0, 0.0, 100.0]
+params2 = [1., 2e4, 3.24, 0.0, 0.0, 100.0]
 x, k, direction = read_last(geom2, params=params2)
-t = plt.hist(direction, 16, normed=True, histtype='step', label='100')
+t = plt.hist(direction, 64, normed=True, histtype='step', label='100')
 
 geom2 = 'Zheng_sphere'
-params2 = [1., 2e4, 3.3, 0.0, 0.0, 50.0]
+params2 = [1., 2e4, 3.24, 0.0, 0.0, 50.0]
 x, k, direction = read_last(geom2, params=params2)
-t = plt.hist(direction, 16, normed=True, histtype='step', label='50')
+t = plt.hist(direction, 64, normed=True, histtype='step', label='50')
 
 plt.legend()
 plt.show()
@@ -64,20 +64,21 @@ plt.show()
 ###
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.3, 0.0, 0.0, 0.0]
+params = [1., 2e4, 3.24, 0.0, 0.0, 0.0]
 x, k, direction = read_last(geom, params=params)
 t = plt.hist(direction, 32, normed=True, histtype='step', label='0.00')
 
 geom2 = 'Zheng_sphere'
-params2 = [1., 2e4, 3.3, 0.25, 0.0, 0.0]
+params2 = [1., 2e4, 3.24, 0.25, 0.0, 0.0]
 x, k, direction = read_last(geom2, params=params2)
 t = plt.hist(direction, 32, normed=True, histtype='step', label='0.25')
 
 geom2 = 'Zheng_sphere'
-params2 = [1., 2e4, 3.3, 0.5, 0.0, 0.0]
+params2 = [1., 2e4, 3.24, 0.5, 0.0, 0.0]
 x, k, direction = read_last(geom2, params=params2)
 t = plt.hist(direction, 64, normed=True, histtype='step', label='0.50')
 
+plt.grid('on')
 plt.legend(loc=3)
 plt.show()
 

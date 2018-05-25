@@ -76,13 +76,14 @@ def get_par_velocity_of_atom(nu, T, u, n, N=100):
     :return:   vector parallel to
     '''
     x = get_x(nu, T)
-    DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
-    a = DeltanuL / 2. / DeltanuD
-    v_par = np.random.normal(loc=0, scale=1. / np.sqrt(2 * mp_over_2kB / T), size=N)
+    # DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
+    # a = DeltanuL / 2. / DeltanuD
+    a = 4.7e-4 * (T / 1e4) ** -0.5
+    v_par = np.random.normal(loc=0, scale=1., size=N)
     r = np.random.rand(N)
     temp = a ** 2 / ((x - (np.dot(u, n) + v_par) / c) ** 2 + a ** 2)
-    if temp.max() < 10. / N:
-        temp /= temp.max()
+    # if temp.max() < 10. / N:
+    #     temp /= temp.max()
     r = r < temp
     return n * v_par[r][0]
 
