@@ -83,7 +83,7 @@ def get_par_velocity_of_atom(nu, T, u, n, mode='direct', N=10000):
         vth = get_vth(T)
         a = 4.7e-4 * (T / 1e4) ** -0.5
         umod = np.dot(u, n)
-        q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (a ** 2 + (x - (v + umod) / c) ** 2)
+        q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (a ** 2 + (x - (v - umod) / c) ** 2)
         I = lambda w: integrate.quad(q, w[0], w[1], limit=1000)[0]
         w_list = np.linspace(-5 * vth, 5 * vth, 1000)
         res = np.zeros(len(w_list))
