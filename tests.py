@@ -89,12 +89,15 @@ plt.show()
 
 
 t = []
-for i in range(100):
-    t.append(get_par_velocity_of_atom(nua, 2e4, np.array([-20., 0, 0]), np.array([1., 0, 0]), N=1000))
+for i in range(1000):
+    t.append(get_par_velocity_of_atom(nua, 2e4, np.array([-100., 0, 0]), np.array([1., 0, 0])) +
+             get_perp_velocity_of_atom(nua, 2e4, np.array([-1000., 0, 0]), np.array([1., 0, 0])))
 
-t = np.array(t)[:, 0]
+t = np.array(t)
 print(t.mean())
-plt.hist(t, 32)
+plt.hist(t[:, 0], 16, histtype='step')
+plt.hist(t[:, 1], 16, histtype='step')
+plt.hist(t[:, 2], 16, histtype='step')
 plt.show()
 
 nu = nua

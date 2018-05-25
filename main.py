@@ -7,7 +7,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.24, 0.00, 0.0, 200.0]
+params = [1., 2e4, 3.24, 0.00, 0.0, 2 * 200.0]
 N_per_node = 28
 N_per_proc = 10
 N_nodes = 60
@@ -55,7 +55,12 @@ x, k, direction = read_last(geom2, params=params2)
 t = plt.hist(direction, 64, normed=True, histtype='step', label='50')
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 3.24, 0.0, 0.0, 200.0]
+params = [1., 2e4, 2 * 3.24, 0.0, 0.0, 200.0]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(direction, 64, normed=True, histtype='step', label='200')
+
+geom = 'Zheng_sphere'
+params = [1., 2e4, 3.24, 0.0, 0.0, 2 * 200.0]
 x, k, direction = read_last(geom, params=params)
 t = plt.hist(direction, 64, normed=True, histtype='step', label='200')
 
