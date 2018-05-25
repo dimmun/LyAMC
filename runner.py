@@ -29,7 +29,8 @@ elif args.geometry[0] == 'Zheng_sphere':
                         R=args.params[2],
                         A=args.params[3],
                         V=args.params[4],
-                        DeltaV=args.params[5])
+                        DeltaV=args.params[5],
+                        IC='uniform')
 else:
     print('define a proper geometry')
 ### Photon parameters:
@@ -39,10 +40,12 @@ k_last = []
 x_last = []
 
 for iii in range(nsim):
-    p = [0, 0, 0]  # position in pc
+    # p = [0, 0, 0]  # position in pc
     local_temperature = geom.temperature(p)
 
     k, temp = random_n([], mode='uniform')  # normal vector
+
+    p = geom.IC()
     x = np.random.normal(0, 1) * get_vth(local_temperature) / c
 
     N = 1000

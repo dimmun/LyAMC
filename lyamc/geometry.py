@@ -1,5 +1,7 @@
 import numpy as np
 
+from lyamc.redistribution import random_n
+
 
 class plane_gradient:
     def __init__(self, gradV=0, T=1e4, n=10.):
@@ -36,13 +38,22 @@ class Zheng_sphere:
     Examples from http://iopscience.iop.org/article/10.1088/0004-637X/794/2/116/pdf
     '''
 
-    def __init__(self, nbar=1., T=2e4, R=10., A=0, V=0, DeltaV=0):
+    def __init__(self, nbar=1., T=2e4, R=10., A=0, V=0, DeltaV=0, IC='center'):
         self.nbar = nbar
         self.T = T
         self.R = R
         self.A = A
         self.V = V
         self.DeltaV = DeltaV
+        self.IC = IC
+
+    def get_IC(self):
+        if self.IC == 'center':
+            p = [0, 0, 0]
+        elif self.IC == 'uniform':
+            k, temp = random_n([], mode='uniform')
+            p = np.random.rand() ** 0.3333 * k * self.R
+        return p
 
     def temperature(self, x):
         return self.T
