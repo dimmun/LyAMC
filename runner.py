@@ -47,7 +47,7 @@ for iii in range(nsim):
 
     k, temp = random_n([], mode='uniform')  # normal vector
 
-    x = np.random.normal(0, 1) * get_vth(local_temperature) / c
+    x = np.random.normal(0, 1)  # * get_vth(local_temperature) / c
 
     N = 1000
 
