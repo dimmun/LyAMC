@@ -65,7 +65,7 @@ def get_parallel_PDF(v, u, n, nu, T):
     # return np.exp( - mp_over_2kB / T * (v_par-u_par)**2) / ((x - v_par/c)**2 + a**2)
 
 
-def get_par_velocity_of_atom(nu, T, u, n, N=100):
+def get_par_velocity_of_atom(nu, T, u, n, N=10000):
     '''
     Generates a parallel component for the velocity of the atom.
 
@@ -79,11 +79,11 @@ def get_par_velocity_of_atom(nu, T, u, n, N=100):
     # DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
     # a = DeltanuL / 2. / DeltanuD
     a = 4.7e-4 * (T / 1e4) ** -0.5
-    v_par = np.random.normal(loc=0, scale=1., size=N)
+    v_par = np.random.normal(loc=0, scale=1., size=N) * get_vth(T)
     r = np.random.rand(N)
     temp = a ** 2 / ((x - (np.dot(u, n) + v_par) / c) ** 2 + a ** 2)
-    # if temp.max() < 10. / N:
-    #     temp /= temp.max()
+    if temp.max() < 10. / N:
+        temp /= temp.max()
     r = r < temp
     return n * v_par[r][0]
 

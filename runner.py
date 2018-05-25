@@ -40,8 +40,10 @@ x_last = []
 
 for iii in range(nsim):
     p = [0, 0, 0]  # position in pc
+    local_temperature = geom.temperature(p)
+
     k, temp = random_n([], mode='uniform')  # normal vector
-    x = np.random.normal(0, 1)
+    x = np.random.normal(0, 1) * get_vth(local_temperature) / c
 
     N = 1000
 
@@ -57,7 +59,6 @@ for iii in range(nsim):
     d_absorbed = 0
     d = np.linspace(0, 10, 1000)
 
-    local_temperature = geom.temperature(p)
 
     proper_redistribution = True
 
