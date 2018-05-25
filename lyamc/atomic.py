@@ -35,7 +35,7 @@ def sigma(nu, T, u, k):
     :param k: direction of the photon
     :return: sigma in 1/cm^2
     '''
-    nu_new = (1. + npsumdot(u, k) / c) * nu
+    nu_new = (1. - npsumdot(u, k) / c) * nu
     x_new = get_x(nu_new, T)
     # vth = get_vth(T)
     # Deltanua = nua * vth / c

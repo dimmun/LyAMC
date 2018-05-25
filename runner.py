@@ -113,7 +113,7 @@ for iii in range(nsim):
                 # print(x_new - x - np.sum(vs * (res[1] - ns), axis=-1)/vth*c)
             else:
                 k_new, mu = random_n(k)  # , mode='uniform')  # new direction
-                print(k, k_new)
+                # print(k, k_new)
                 x_new_in = get_x(nu, local_temperature_new)
                 x_new = get_xout(xin=x_new_in,
                                  v=v_atom,

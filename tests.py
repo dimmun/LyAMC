@@ -42,7 +42,7 @@ np.trapz(res, x)
 
 np.trapz(V(x, alpha=1 / np.sqrt(2.), gamma=a), x)
 
-plt.plot(x, res, label='integral')
+plt.plot(x, res, '--', label='integral', lw=2)
 plt.plot(x, V(x, alpha=1., gamma=a), label='code')
 plt.legend()
 plt.show()
