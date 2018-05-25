@@ -41,11 +41,12 @@ x_last = []
 
 for iii in range(nsim):
     # p = [0, 0, 0]  # position in pc
+    p = geom.get_IC()
+
     local_temperature = geom.temperature(p)
 
     k, temp = random_n([], mode='uniform')  # normal vector
 
-    p = geom.IC()
     x = np.random.normal(0, 1) * get_vth(local_temperature) / c
 
     N = 1000
@@ -67,7 +68,7 @@ for iii in range(nsim):
     i = -1
 
     while (d_absorbed < d.max()) & (i < N - 2):
-        print(i, x)
+        # print(i, x)
         i += 1
         # define initial parameters
         p = p_history[i, :].copy()  # position
