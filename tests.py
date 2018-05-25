@@ -50,14 +50,74 @@ plt.show()
 ####
 
 
+
+
+
+
+plt.plot(v_list, res)
+plt.show()
+
+v_list = np.linspace(-100, 100, 1000)
+u = 30
+x = 0
+T = 2e4
+vth = get_vth(T)
+a = 4.7e-4 * (T / 1e4) ** -0.5
+q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (a ** 2 + (x - (v + u) / c) ** 2)
+
+
+# q2 = lambda v: np.exp(-(v - u) ** 2 / vth**2)
+
+
+
+def vpar_cdf(q, w):
+    I = integrate.quad(q, -np.inf, w, limit=1000)[0]
+    return I
+
+
+res = np.array([vpar_cdf(q, w) for w in v_list])
+
+plt.plot(v_list, q(v_list))
+# plt.plot(v_list, res)
+# plt.plot(v_list, q2(v_list))
+
+
+plt.grid('on')
+plt.show()
+
+####
+
+
 t = []
-for i in range(10000):
-    t.append(get_par_velocity_of_atom(nua, 2e4, np.array([-200., 0, 0]), np.array([1., 0, 0]), N=1000))
+for i in range(100):
+    t.append(get_par_velocity_of_atom(nua, 2e4, np.array([-20., 0, 0]), np.array([1., 0, 0]), N=1000))
 
 t = np.array(t)[:, 0]
 print(t.mean())
 plt.hist(t, 32)
 plt.show()
+
+nu = nua
+T = 2e4
+n = np.array([1., 0, 0])
+u = np.array([-20., 0, 0])
+
+x = get_x(nu, T)
+vth = get_vth(T)
+a = 4.7e-4 * (T / 1e4) ** -0.5
+umod = np.dot(u, n)
+q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (a ** 2 + (x - (v + umod) / c) ** 2)
+I = lambda w: integrate.quad(q, w[0], w[1], limit=1000)[0]
+w_list = np.linspace(-5 * vth, 5 * vth, 1000)
+res = np.zeros(len(w_list))
+for i in range(len(w_list) - 1):
+    res[i + 1] = I([w_list[i], w_list[i + 1]])
+
+res = np.cumsum(res)
+res /= res[-1]
+r = np.random.rand()
+
+print(n * np.interp(r, res, w_list))
 
 ####
 
