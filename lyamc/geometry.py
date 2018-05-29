@@ -5,7 +5,7 @@ from lyamc.redistribution import random_n
 
 
 class Neufeld_test:
-    def __init__(self, tau=1e4, T=10):
+    def __init__(self, tau=1e4, T=10.):
         self.T = T
         self.tau = tau
         self.R = 1

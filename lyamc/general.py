@@ -56,8 +56,10 @@ def decodename(geom, params, sep='_'):
     if len(params) == 6:
         s = '%s %0.2f %.1e %0.2f %0.2f %0.2f %0.2f' % (
         geom, params[0], params[1], params[2], params[3], params[4], params[5])
-    else:
+    elif len(params) == 3:
         s = '%s %0.2f %.1e %0.2f' % (geom, params[0], params[1], params[2])
+    elif len(params) == 2:
+        s = '%s %0.2e %.2e' % (geom, params[0], params[1])
     s = s.replace(' ', sep)
     return s
 
