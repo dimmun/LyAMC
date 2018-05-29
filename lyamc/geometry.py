@@ -11,7 +11,12 @@ class Neufeld_test:
         self.R = 1
         s = sigmaa0(T)
         self.N = self.tau / s
-        self.n = self.R * cm_in_pc / s
+        self.n = self.N / (self.R * cm_in_pc)
+        self.IC = 'center'
+
+    def get_IC(self):
+        p = [0, 0, 0]
+        return p
 
     def velocity(self, x):
         return 0 * x
@@ -20,7 +25,7 @@ class Neufeld_test:
         return self.T
 
     def density(self, x):
-        d = x * 0. + self.n
+        d = x[:, 0] * 0. + self.n
         d[np.abs(x[:, 0]) > self.R] = 0
         return d
 

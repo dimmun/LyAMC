@@ -19,7 +19,10 @@ from lyamc.coordinates import *
 
 m_hz = 2.2687318181383202e+23
 
-if args.geometry[0] == 'plane_gradient':
+if args.geometry[0] == 'Neufeld_test':
+    geom = Neufeld_test(tau=args.params[0],
+                        T=args.params[1])
+elif args.geometry[0] == 'plane_gradient':
     geom = plane_gradient(n=args.params[0],
                           T=args.params[1],
                           gradV=args.params[2])
@@ -68,7 +71,7 @@ for iii in range(nsim):
     i = -1
 
     while (d_absorbed < d.max()) & (i < N - 2):
-        # print(i, x)
+        print(i, x, p)
         i += 1
         # define initial parameters
         p = p_history[i, :].copy()  # position

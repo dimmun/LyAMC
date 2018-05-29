@@ -14,7 +14,7 @@ params = [1e4, 10.]
 
 N_per_node = 28
 N_per_proc = 10
-N_nodes = 30
+N_nodes = 10
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
