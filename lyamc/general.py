@@ -19,6 +19,14 @@ sigmat = 6.65e-25  # cm^2
 mp_over_2kB = 60.57  # s^2 K / km^2
 
 
+def sigmaa0(T):
+    '''
+    Lyα absorption cross-section at line center
+    :param T: temperature in K
+    :return: cross-section at line center in cm^2
+    '''
+    return 5.9e-14 * (T / 1e4) ** -0.5
+
 def read_last(geom, params):
     s = glob.glob('output/' + decodename(geom, params, sep='_') + '*last*npz')
     temp = np.load(s[0])

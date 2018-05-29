@@ -1,7 +1,28 @@
 import numpy as np
 
+from lyamc.general import sigmaa0, cm_in_pc
 from lyamc.redistribution import random_n
 
+
+class Neufeld_test:
+    def __init__(self, tau=1e4, T=10):
+        self.T = T
+        self.tau = tau
+        self.R = 1
+        s = sigmaa0(T)
+        self.N = self.tau / s
+        self.n = self.R * cm_in_pc / s
+
+    def velocity(self, x):
+        return 0 * x
+
+    def temperature(self, x):
+        return self.T
+
+    def density(self, x):
+        d = x * 0. + self.n
+        d[np.abs(x[:, 0]) > self.R] = 0
+        return d
 
 class plane_gradient:
     def __init__(self, gradV=0, T=1e4, n=10.):

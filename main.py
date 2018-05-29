@@ -10,7 +10,7 @@ geom = 'Zheng_sphere'
 params = [.2, 2e4, 3.24, 0.00, 0.0, 0.0]
 N_per_node = 28
 N_per_proc = 10
-N_nodes = 60
+N_nodes = 30
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
