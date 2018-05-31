@@ -7,7 +7,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [2., 1e4, 3.24, 0.0, 0.0, 0.0]
+params = [1., 2e4, 0.324, 0.0, 0.0, 0.0]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
@@ -121,13 +121,13 @@ plt.show()
 bins = np.linspace(-25, 25, 100)
 
 geom = 'Zheng_sphere'
-params = [2., 1e4, 3.24, 0.0, 0.0, 0.0]
+params = [2., 2e4, .324, 0.0, 0.0, 0.0]
 x, k, direction = read_last(geom, params=params)
 filt = np.abs(direction) > -1
 t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
 
 geom = 'Zheng_sphere'
-params = [1., 1e4, 3.24, 0.0, 0.0, 0.0]
+params = [1., 2e4, .324, 0.0, 0.0, 0.0]
 x, k, direction = read_last(geom, params=params)
 filt = np.abs(direction) > -1
 t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')

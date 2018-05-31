@@ -64,7 +64,7 @@ for iii in range(nsim):
     x_history[0] = x
 
     d_absorbed = 0
-    d = np.linspace(0, 10, 100000)
+    d = np.linspace(0, 1, 100000)
 
     proper_redistribution = False  # True
 
@@ -83,19 +83,19 @@ for iii in range(nsim):
         sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
         q = np.random.rand()
         d_absorbed = interp_d(d, sf, q)  # randomly selecting absorption point
-        while (d_absorbed == d.max()) & (d.max() < 1e3):
+        while (d_absorbed == d.max()) & (d.max() < geom.R * 2):
             # print('Expanding!')
             d *= 2
             l, d = get_trajectory(p, k, d)  # searching for a trajectory
             sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
             d_absorbed = interp_d(d, sf, q)
-        while (d_absorbed < d[10]):
+        while d_absorbed < d[32]:
             # print('Refining!')
             d /= 2
             l, d = get_trajectory(p, k, d)  # searching for a trajectory
             sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
             d_absorbed = interp_d(d, sf, q)
-        if d_absorbed < 1e3:
+        if d_absorbed < geom.R * 2:
             p_new = get_shift(p, k, d_absorbed)  # extracting new position
             # The environment of new scattering
             local_velocity_new = geom.velocity(p_new.reshape(1, -1))  # new local velocity
