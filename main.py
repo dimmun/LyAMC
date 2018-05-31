@@ -7,7 +7,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 0.324, 0.0, 0.0, 0.0]
+params = [1., 1e4, 0.324, 0.0, 200.0, 0.0]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
@@ -118,19 +118,27 @@ t = plt.hist(direction, bins=bins, normed=True, histtype='step', label='200')
 plt.show()
 
 ####
-bins = np.linspace(-25, 25, 100)
+bins = np.linspace(-10, 10, 300)
 
 geom = 'Zheng_sphere'
-params = [2., 2e4, .324, 0.0, 0.0, 0.0]
+params = [1., 1e4, .324, 0.0, 200.0, 0.0]
 x, k, direction = read_last(geom, params=params)
 filt = np.abs(direction) > -1
 t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, .324, 0.0, 0.0, 0.0]
+params = [1., 1e4, .324, 0.0, -200.0, 0.0]
 x, k, direction = read_last(geom, params=params)
 filt = np.abs(direction) > -1
 t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+
+geom = 'Zheng_sphere'
+params = [1., 1e4, .324, 0.0, 0.0, 0.0]
+x, k, direction = read_last(geom, params=params)
+filt = np.abs(direction) > -1
+t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+
+plt.xticks(np.arange(-10, 10.1, 1))
 
 plt.show()
 

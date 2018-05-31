@@ -2,6 +2,8 @@
 Routines for determining the trajectory of the photon
 '''
 
+from scipy.integrate import cumtrapz
+
 from lyamc.atomic import *
 from lyamc.geometry import *
 
@@ -33,7 +35,8 @@ def get_survival_function(nu, l, d, k, geom):
     :return:
     '''
     tau_d = DtauDl(k=k, nu=nu, v=geom.velocity(l), T=geom.temperature(l), ndens=geom.density(l))
-    tau = np.cumsum(tau_d * np.gradient(d))  # replace with cumtrapz
+    # tau = np.cumsum(tau_d * np.gradient(d))  # replace with cumtrapz
+    tau = cumtrapz(y=tau_d, x=d, initial=0)
     return np.exp(-tau)
 
 
