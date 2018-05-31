@@ -90,6 +90,5 @@ def get_vth(T):
     '''return vth in km/s for T in K
     IT IS VELOCITY DISPERSION TIMES SQRT(2)
     '''
-
     return 0.1285 * np.sqrt(T)  # in km/s
 

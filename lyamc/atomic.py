@@ -41,7 +41,7 @@ def sigma(nu, T, u, k):
     # Deltanua = nua * vth / c
     # a = DeltanuL / 2.0 / Deltanua
     a = 4.7e-4 * (T / 1e4) ** -0.5  # Eq 53 from D's motes
-    return 1.045e-13 * (T / 1e4) ** -0.5 * V(x_new, alpha=1., gamma=a)
+    return 1.045e-13 * (T / 1e4) ** -0.5 * V(x_new, alpha=1., gamma=a) / np.sqrt(2)
 
 
 def DtauDl(k, nu, v, T, ndens):

@@ -33,7 +33,7 @@ elif args.geometry[0] == 'Zheng_sphere':
                         A=args.params[3],
                         V=args.params[4],
                         DeltaV=args.params[5],
-                        IC='uniform')
+                        IC='center')
 else:
     print('define a proper geometry')
 ### Photon parameters:

@@ -7,14 +7,14 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [.2, 2e4, 3.24, 0.00, 0.0, 0.0]
+params = [1., 1e4, 3.24, 0.0, 0.0, 0.0]
 
-geom = 'Neufeld_test'
-params = [1e4, 10.]
+# geom = 'Neufeld_test'
+# params = [1e4, 10.]
 
 N_per_node = 28
 N_per_proc = 10
-N_nodes = 10
+N_nodes = 60
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
@@ -47,37 +47,112 @@ for i in range(N_nodes):
 
 ###
 
+# Laursen
 
-geom2 = 'Zheng_sphere'
-params2 = [1., 2e4, 3.24, 0.0, 0.0, 100.0]
-x, k, direction = read_last(geom2, params=params2)
-t = plt.hist(direction, 64, normed=True, histtype='step', label='100')
-
-geom2 = 'Zheng_sphere'
-params2 = [1., 2e4, 3.24, 0.0, 0.0, 50.0]
-x, k, direction = read_last(geom2, params=params2)
-t = plt.hist(direction, 64, normed=True, histtype='step', label='50')
+bins = np.linspace(-25, 25, 200)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 2 * 3.24, 0.0, 0.0, 200.0]
+params = [2., 1e4, 3.24, 0.0, 0.0, 0.0]
 x, k, direction = read_last(geom, params=params)
-t = plt.hist(direction, 64, normed=True, histtype='step', label='200')
+filt = np.abs(direction) > 0.
+t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+
+# geom = 'Zheng_sphere'
+# params = [2., 1e4, 3.24, 0.0, 0.0, 200.0]
+# x, k, direction = read_last(geom, params=params)
+# filt = np.abs(direction)>0.9
+# t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+#
+# geom = 'Zheng_sphere'
+# params = [2., 1e4, 3.24, 0.0, 0.0, -200.0]
+# x, k, direction = read_last(geom, params=params)
+# filt = np.abs(direction)>0.9
+# t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+
+plt.show()
+
+####
+
+
+bins = np.arange(-60, 60, .5)
+
+geom = 'Neufeld_test'
+params = [1e4, 10]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(x, bins=bins, normed=True, histtype='step', label='200')
+
+geom = 'Neufeld_test'
+params = [1e5, 10]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(x, bins=bins, normed=True, histtype='step', label='200')
+
+geom = 'Neufeld_test2'
+params = [1e4, 10]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(x, bins=bins, normed=True, histtype='step', label='200')
+plt.show()
+
+####
+bins = np.linspace(-1, 1, 64)
+
+geom = 'Zheng_sphere'
+params = [2., 2e4, 3.24, 0.0, 0.0, 50.0]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(direction, bins=bins, normed=True, histtype='step', label='50')
+
+geom = 'Zheng_sphere'
+params = [2., 2e4, 3.24, 0.0, 0.0, 100.0]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(direction, bins=bins, normed=True, histtype='step', label='100')
+
+geom = 'Zheng_sphere'
+params = [1., 2e4, 3.24, 0.0, 0.0, 100.0]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(direction, bins=bins, normed=True, histtype='step', label='200')
+
+geom = 'Zheng_sphere'
+params = [2., 2e4, 3.24, 0.0, 0.0, 100.0]
+x, k, direction = read_last(geom, params=params)
+t = plt.hist(direction, bins=bins, normed=True, histtype='step', label='200')
+
+plt.show()
+
+####
+bins = np.linspace(-25, 25, 100)
+
+geom = 'Zheng_sphere'
+params = [2., 1e4, 3.24, 0.0, 0.0, 0.0]
+x, k, direction = read_last(geom, params=params)
+filt = np.abs(direction) > -1
+t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+
+geom = 'Zheng_sphere'
+params = [1., 1e4, 3.24, 0.0, 0.0, 0.0]
+x, k, direction = read_last(geom, params=params)
+filt = np.abs(direction) > -1
+t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+
+plt.show()
 
 ####
 
 geom = 'Zheng_sphere'
-params = [.2, 2e4, 3.24, 0.0, 0.0, 0.0]
+params = [.1, 2e4, 3.24, 0.0, 0.0, 0.0]
 x, k, direction = read_last(geom, params=params)
 # t = plt.hist(direction, 64, normed=True, histtype='step', label='200')
 t = plt.hist(x, bins=np.linspace(-20, 20, 100), normed=True, histtype='step', label='0')
-params = [.2, 2e4, 3.24, 0.0, 200.0, 0.0]
+
+params = [.1, 2e4, 3.24, 0.0, 200.0, 0.0]
 x, k, direction = read_last(geom, params=params)
 # t = plt.hist(direction, 64, normed=True, histtype='step', label='200')
 t = plt.hist(x, bins=np.linspace(-20, 20, 100), normed=True, histtype='step', label='200')
-params = [.2, 2e4, 3.24, 0.0, -200.0, 0.0]
-x, k, direction = read_last(geom, params=params)
-# t = plt.hist(direction, 64, normed=True, histtype='step', label='200')
-t = plt.hist(x, bins=np.linspace(-20, 20, 100), normed=True, histtype='step', label='-200')
+
+# params = [.1, 2e4, 3.24, 0.0, -200.0, 0.0]
+# x, k, direction = read_last(geom, params=params)
+# # t = plt.hist(direction, 64, normed=True, histtype='step', label='200')
+# t = plt.hist(x, bins=np.linspace(-20, 20, 100), normed=True, histtype='step', label='-200')
+
+plt.xticks(np.arange(-20, 20.1, 10))
 
 plt.legend()
 plt.show()
@@ -95,9 +170,28 @@ x, k, direction = read_last(geom2, params=params2)
 t = plt.hist(direction, 32, normed=True, histtype='step', label='0.25')
 
 geom2 = 'Zheng_sphere'
-params2 = [1., 2e4, 3.24, 0.5, 0.0, 0.0]
+params2 = [1., 2e4, 3.24, 0., 0.0, 0.0]
 x, k, direction = read_last(geom2, params=params2)
 t = plt.hist(direction, 64, normed=True, histtype='step', label='0.50')
+geom2 = 'Zheng_sphere'
+params2 = [2., 2e4, 3.24, 0., 0.0, 0.0]
+x, k, direction = read_last(geom2, params=params2)
+t = plt.hist(direction, 64, normed=True, histtype='step', label='0.50')
+
+plt.grid('on')
+plt.legend(loc=3)
+plt.show()
+
+###
+
+geom2 = 'Zheng_sphere'
+params2 = [1., 2e4, 3.24, 0., 0.0, 0.0]
+x, k, direction = read_last(geom2, params=params2)
+t = plt.hist(x, 64, normed=True, histtype='step', label='0.50')
+geom2 = 'Zheng_sphere'
+params2 = [2., 2e4, 3.24, 0., 0.0, 0.0]
+x, k, direction = read_last(geom2, params=params2)
+t = plt.hist(x, 64, normed=True, histtype='step', label='0.50')
 
 plt.grid('on')
 plt.legend(loc=3)
