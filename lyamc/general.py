@@ -92,3 +92,11 @@ def get_vth(T):
     '''
     return 0.1285 * np.sqrt(T)  # in km/s
 
+
+def get_a(T):
+    '''
+    :param T: temperature in K
+    :return: \Delta nu_c / (2 * \Delta nu_D)
+    '''
+    DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
+    return DeltanuL / 2. / DeltanuD
