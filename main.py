@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from lyamc.analytial import *
 
+from lyamc.analytical import *
 from lyamc.general import *
 
 # os.system('rm output/* -f')
@@ -8,14 +8,14 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [2., 1e4, 0.324, 0.0, 200.0, 0.0]
+params = [10., 2e4, 0.324, 0.0, 0.0, 200.0]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
 
 N_per_node = 28
-N_per_proc = 100
-N_nodes = 60
+N_per_proc = 20
+N_nodes = 10
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
@@ -50,25 +50,27 @@ for i in range(N_nodes):
 
 # Laursen
 
-bins = np.linspace(-25, 25, 200)
+bins = np.linspace(-25, 25, 100)
 
 geom = 'Zheng_sphere'
-params = [2., 1e4, 3.24, 0.0, 0.0, 0.0]
+params = [10., 1e4, 0.324, 0.0, 0.0, 200.0]
 x, k, direction = read_last(geom, params=params)
-filt = np.abs(direction) > 0.
-t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+filt = np.abs(direction) < 0.01
+t = plt.hist(x[filt], 256, normed=True, histtype='step', label='200')
+# t = plt.hist(direction[filt],256, normed=True, histtype='step', label='200')
+
+geom = 'Zheng_sphere'
+params = [10., 2e4, 0.324, 0.0, 0.0, 200.0]
+x, k, direction = read_last(geom, params=params)
+filt = np.abs(direction) < 0.01
+t = plt.hist(x[filt], 256, normed=True, histtype='step', label='100')
+# t = plt.hist(direction[filt],256, normed=True, histtype='step', label='100')
 
 # geom = 'Zheng_sphere'
-# params = [2., 1e4, 3.24, 0.0, 0.0, 200.0]
+# params =  [10., 1e4, 0.324, 0.0, 0.0, 100.0]
 # x, k, direction = read_last(geom, params=params)
-# filt = np.abs(direction)>0.9
-# t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
-#
-# geom = 'Zheng_sphere'
-# params = [2., 1e4, 3.24, 0.0, 0.0, -200.0]
-# x, k, direction = read_last(geom, params=params)
-# filt = np.abs(direction)>0.9
-# t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+# filt = np.abs(direction) > 0.
+# t = plt.hist(direction[filt],256, normed=True, histtype='step', label='50')
 
 plt.show()
 
@@ -145,11 +147,24 @@ plt.xticks(np.arange(-10, 10.1, 1))
 plt.show()
 
 ####
-bins = np.linspace(-100, 100, 200)
+bins = np.linspace(-100, 40, 200)
 dd = 200
 
 geom = 'Zheng_sphere'
+params = [dd, 1e4, .324, 0.0, 20.0, 0.0]
+x, k, direction = read_last(geom, params=params)
+filt = np.abs(direction) > -1
+t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+
+
+geom = 'Zheng_sphere'
 params = [dd, 1e4, .324, 0.0, 200.0, 0.0]
+x, k, direction = read_last(geom, params=params)
+filt = np.abs(direction) > -1
+t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
+
+geom = 'Zheng_sphere'
+params = [dd, 1e4, .324, 0.0, 2000.0, 0.0]
 x, k, direction = read_last(geom, params=params)
 filt = np.abs(direction) > -1
 t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
@@ -166,7 +181,10 @@ x, k, direction = read_last(geom, params=params)
 filt = np.abs(direction) > -1
 t = plt.hist(x[filt], bins=bins, normed=True, histtype='step', label='200')
 
-plt.xticks(np.arange(-100, 100.1, 10))
+q = Dijkstra_sphere_test(t[1], get_a(1e4), 1.2e7 / 2) * 2.3
+plt.plot(t[1], q, 'k')
+
+plt.xticks(np.arange(-100, 40.1, 10))
 
 plt.show()
 

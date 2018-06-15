@@ -11,4 +11,4 @@ def Dijkstra_sphere_test(x, a, tau0):
     :return:
     '''
     return np.sqrt(np.pi) / np.sqrt(24) / a / tau0 * x ** 2 / (
-    1. + np.cosh(np.sqrt(2. * np.pi / 27) * np.abs(x) ** 3) / a / tau0)
+        1. + np.cosh(np.sqrt(2. * np.pi / 27) * np.abs(x) ** 3 / a / tau0))

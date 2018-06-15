@@ -34,6 +34,12 @@ class plane_gradient:
         self.gradV = gradV
         self.T = T
         self.n = n
+        s = sigmaa0(T)
+        self.R = 1e6 / s / n / cm_in_pc
+
+    def get_IC(self):
+        p = [0, 0, 0]
+        return p
 
     def velocity(self, x):
         '''Return velocity in km/s.
