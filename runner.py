@@ -45,6 +45,7 @@ x_last = []
 z_map_list = np.linspace(-geom.R * 10, geom.R * 10, 1000)
 z_map = np.zeros([len(z_map_list) - 1, 3])
 
+
 for iii in range(nsim):
     # p = [0, 0, 0]  # position in pc
     p = geom.get_IC()
@@ -54,6 +55,7 @@ for iii in range(nsim):
     k, temp = random_n([], mode='uniform')  # normal vector
 
     x = np.random.normal(0, 1)  # * get_vth(local_temperature) / c
+    x = 0
 
     N = 1000
 
@@ -69,13 +71,13 @@ for iii in range(nsim):
     d_absorbed = 0
     d = np.linspace(0, 1, 100000)
 
-    proper_redistribution = True
+    proper_redistribution = False
 
     i = -1
 
     while (d_absorbed < d.max()) & (i < N - 2):
         i += 1
-        print(i, x, p)
+        print(i, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
         # define initial parameters
         p = p_history[i, :].copy()  # position
         k = k_history[i, :].copy()  # direction
@@ -105,7 +107,7 @@ for iii in range(nsim):
             local_temperature_new = geom.temperature(p_new.reshape(1, -1))  # new local temperature
             # selecting a random atom
             v_atom = local_velocity_new + \
-                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, N=1000) + \
+                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, mode='none', N=1000) + \
                      get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
             # generating new direction and new frequency
             if proper_redistribution:

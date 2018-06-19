@@ -27,6 +27,31 @@ def sigmaa0(T):
     '''
     return 5.9e-14 * (T / 1e4) ** -0.5
 
+
+def H_fit(a, x):
+    '''
+    Analytical fir to Voight profile from Tasitsiomi (2006), copied from Lauren, Razoumov & Sommer-Larsen (2009)
+    :param a:
+    :param x:
+    :return:
+    '''
+    zeta = (x ** 2 - 0.855) / (x ** 2 + 3.42)
+    P = 5.674 * zeta ** 4 - 9.207 * zeta ** 3 + 4.421 * zeta ** 2 + 0.1117 * zeta
+    q = (zeta > 0) * (1. + 21 / (x ** 2 + 1e-10)) * a / np.pi / (x ** 2 + 1) * P
+    return q * np.sqrt(np.pi) + np.exp(-x ** 2)
+
+
+def sigmaax(T, x):
+    '''
+    Lyα absorption cross-section for given x
+    :param T: temperature in K
+    :param x: temperature in K
+    :return: cross-section at line center in cm^2
+    '''
+    # return 0.4162 * np.sqrt(np.pi) * (4.8e-10)**2 / 9.1e-28 / 2.9979e10 / get_vth(T)
+    anu = 4.7e-4 * (T / 1e4) ** -0.5
+    return 5.9e-14 * (T / 1e4) ** -0.5 * H_fit(anu, x)
+
 def read_last(geom, params):
     s = glob.glob('output/' + decodename(geom, params, sep='_') + '*last*npz')
     temp = np.load(s[0])

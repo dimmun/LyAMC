@@ -53,7 +53,7 @@ def get_xout(xin, v, kin, kout, mu, T):
     '''Equation 65'''
     g = get_g(T)
     vth = get_vth(T)
-    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth + g * (mu - 1)
+    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth  # + g * (mu - 1)
 
 
 def get_parallel_PDF(v, u, n, nu, T):
