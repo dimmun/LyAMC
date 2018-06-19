@@ -69,7 +69,7 @@ for iii in range(nsim):
     d_absorbed = 0
     d = np.linspace(0, 1, 100000)
 
-    proper_redistribution = False  # True
+    proper_redistribution = True
 
     i = -1
 
