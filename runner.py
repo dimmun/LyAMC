@@ -86,53 +86,54 @@ for iii in range(nsim):
         sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
         q = np.random.rand()
         d_absorbed = interp_d(d, sf, q)  # randomly selecting absorption point
-        while (d_absorbed == d.max()) & (d.max() < geom.R * 2):
-            # print('Expanding!')
-            d *= 2
-            l, d = get_trajectory(p, k, d)  # searching for a trajectory
-            sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
-            d_absorbed = interp_d(d, sf, q)
-        while d_absorbed < d[32]:
-            # print('Refining!')
-            d /= 2
-            l, d = get_trajectory(p, k, d)  # searching for a trajectory
-            sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
-            d_absorbed = interp_d(d, sf, q)
+        # while (d_absorbed == d.max()) & (d.max() < geom.R * 2):
+        #     # print('Expanding!')
+        #     d *= 2
+        #     l, d = get_trajectory(p, k, d)  # searching for a trajectory
+        #     sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
+        #     d_absorbed = interp_d(d, sf, q)
+        # while d_absorbed < d[32]:
+        #     # print('Refining!')
+        #     d /= 2
+        #     l, d = get_trajectory(p, k, d)  # searching for a trajectory
+        #     sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
+        #     d_absorbed = interp_d(d, sf, q)
         if d_absorbed < geom.R * 2:
             p_new = get_shift(p, k, d_absorbed)  # extracting new position
-            # The environment of new scattering
-            local_velocity_new = geom.velocity(p_new.reshape(1, -1))  # new local velocity
-            local_temperature_new = geom.temperature(p_new.reshape(1, -1))  # new local temperature
-            # selecting a random atom
-            v_atom = local_velocity_new + \
-                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, N=1000) + \
-                     get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
-            # generating new direction and new frequency
-            if proper_redistribution:
-                nu_i = np.array([nu / m_hz])
-                ns = k.reshape(1, -1)
-                vs = v_atom.reshape(1, -1) / c
-                res = scattering_lab_frame(nu_i, ns, vs)
-                x_new = get_x(res[0] * m_hz, local_temperature_new)
-                k_new = res[1]
-                vth = get_vth(local_temperature_new)
-                # print(x_new - x - np.sum(vs * (res[1] - ns), axis=-1)/vth*c)
+            if np.sum(p_new ** 2) < geom.R ** 2:
+                # The environment of new scattering
+                local_velocity_new = geom.velocity(p_new.reshape(1, -1))  # new local velocity
+                local_temperature_new = geom.temperature(p_new.reshape(1, -1))  # new local temperature
+                # selecting a random atom
+                v_atom = local_velocity_new + \
+                         get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, N=1000) + \
+                         get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
+                # generating new direction and new frequency
+                if proper_redistribution:
+                    nu_i = np.array([nu / m_hz])
+                    ns = k.reshape(1, -1)
+                    vs = v_atom.reshape(1, -1) / c
+                    res = scattering_lab_frame(nu_i, ns, vs)
+                    x_new = get_x(res[0] * m_hz, local_temperature_new)
+                    k_new = res[1]
+                    vth = get_vth(local_temperature_new)
+                    # print(x_new - x - np.sum(vs * (res[1] - ns), axis=-1)/vth*c)
+                else:
+                    k_new, mu = random_n(k)  # , mode='uniform')  # new direction
+                    # print(k, k_new)
+                    x_new_in = get_x(nu, local_temperature_new)
+                    x_new = get_xout(xin=x_new_in,
+                                     v=v_atom,
+                                     kin=k,
+                                     kout=k_new,
+                                     mu=mu,
+                                     T=local_temperature)
+                # recording data into arrays
+                p_history[i + 1, :] = p_new
+                k_history[i + 1, :] = k_new
+                x_history[i + 1] = x_new
             else:
-                k_new, mu = random_n(k)  # , mode='uniform')  # new direction
-                # print(k, k_new)
-                x_new_in = get_x(nu, local_temperature_new)
-                x_new = get_xout(xin=x_new_in,
-                                 v=v_atom,
-                                 kin=k,
-                                 kout=k_new,
-                                 mu=mu,
-                                 T=local_temperature)
-            # recording data into arrays
-            p_history[i + 1, :] = p_new
-            k_history[i + 1, :] = k_new
-            x_history[i + 1] = x_new
-        else:
-            i = i - 1
+                i = i - 1
 
     print(i)
 

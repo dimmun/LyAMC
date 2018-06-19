@@ -15,7 +15,7 @@ params = [10., 1e4, 0.324, 0.0, 0.0, 200.0]
 
 N_per_node = 28
 N_per_proc = 20
-N_nodes = 5
+N_nodes = 50
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
@@ -78,21 +78,21 @@ plt.show()
 
 dat = np.genfromtxt('R19_V200.dat', skip_header=2)
 
-bins = np.linspace(-25, 25, 100)
+bins = np.linspace(-1, 1, 100)
 
-geom = 'Zheng_sphere'
-params = [10., 2e4, 0.324, 0.0, 0.0, 200.0]
-x, k, direction = read_last(geom, params=params)
-filt = np.abs(direction) > 0
-t = plt.hist(direction[filt], 64, normed=True, histtype='step', label='200')
+# geom = 'Zheng_sphere'
+# params = [10., 2e4, 0.324, 0.0, 0.0, 200.0]
+# x, k, direction = read_last(geom, params=params)
+# filt = np.abs(direction) > 0
+# t = plt.hist(direction[filt], 64, normed=True, histtype='step', label='200')
 
 geom = 'Zheng_sphere'
 params = [10., 1e4, 0.324, 0.0, 0.0, 200.0]
 x, k, direction = read_last(geom, params=params)
 filt = np.abs(direction) > 0
-t = plt.hist(direction[filt], 64, normed=True, histtype='step', label='100')
+t = plt.hist(direction[filt], bins, normed=True, histtype='step', label='100')
 
-plt.hist(dat[:, 3], 64, histtype='step', normed=True);
+plt.hist(dat[:, 3], bins, histtype='step', normed=True);
 
 # geom = 'Zheng_sphere'
 # params =  [10., 2e4, 0.324, 0.0, 0.0, 0.0]
