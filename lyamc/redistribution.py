@@ -2,6 +2,8 @@ from scipy import integrate
 
 from lyamc.general import *
 
+ALYA = 6.2648e+8
+
 
 def rotation_matrix(axis, theta):
     """
@@ -53,7 +55,7 @@ def get_xout(xin, v, kin, kout, mu, T):
     '''Equation 65'''
     g = get_g(T)
     vth = get_vth(T)
-    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth  # + g * (mu - 1)
+    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth + g * (mu - 1)
 
 
 def get_parallel_PDF(v, u, n, nu, T):
@@ -68,6 +70,14 @@ def get_parallel_PDF(v, u, n, nu, T):
     # return np.exp( - mp_over_2kB / T * (v_par-u_par)**2) / ((x - v_par/c)**2 + a**2)
 
 
+def get_lookup_table_for_par_velocity(T):
+    '''
+    Precalculates lookup table for parallel velocities
+    :param T:
+    :return:
+    '''
+
+
 def get_par_velocity_of_atom(nu, T, u, n, mode='direct', N=10000):
     '''
     Generates a parallel component for the velocity of the atom.
@@ -78,10 +88,25 @@ def get_par_velocity_of_atom(nu, T, u, n, mode='direct', N=10000):
     :param n:  photon direction
     :return:   vector parallel to
     '''
+    x = get_x(nu, T)
+    vth = get_vth(T)
+    a = 4.7e-4 * (T / 1e4) ** -0.5
     if mode == 'direct':
-        x = get_x(nu, T)
-        vth = get_vth(T)
-        a = 4.7e-4 * (T / 1e4) ** -0.5
+        umod = np.dot(u, n)
+        q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (
+        (nu * (1 - (v + umod) / c) - nua) ** 2 + (ALYA / 16 / np.pi ** 2) ** 2)
+        I = lambda w: integrate.quad(q, w[0], w[1], )[0]
+        w_list = np.linspace(-5 * vth, 5 * vth, 32)
+        res = np.zeros(len(w_list))
+        for i in range(len(w_list) - 1):
+            res[i + 1] = I([w_list[i], w_list[i + 1]])
+        res = np.cumsum(res)
+        res /= res[-1]
+        r = np.random.rand()
+        return n * np.interp(r, res, w_list)
+    elif mode == 'fast':
+        return 0
+    elif mode == 'direct_old':
         umod = np.dot(u, n)
         q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (a ** 2 + (x - (v + umod) / c) ** 2)
         I = lambda w: integrate.quad(q, w[0], w[1], limit=1000)[0]
@@ -93,12 +118,10 @@ def get_par_velocity_of_atom(nu, T, u, n, mode='direct', N=10000):
         res /= res[-1]
         r = np.random.rand()
         return n * np.interp(r, res, w_list)
-    else:
-        x = get_x(nu, T)
+    elif mode == 'fast_old':
         # DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
         # a = DeltanuL / 2. / DeltanuD
-        a = 4.7e-4 * (T / 1e4) ** -0.5
-        v_par = np.random.normal(loc=0, scale=1., size=N) * get_vth(T)
+        v_par = np.random.normal(loc=0, scale=1., size=N) * get_vth(T) / np.sqrt(2)
         r = np.random.rand(N)
         temp = a ** 2 / ((x - (np.dot(u, n) + v_par) / c) ** 2 + a ** 2)
         if temp.max() < 10. / N:

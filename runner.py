@@ -57,7 +57,7 @@ for iii in range(nsim):
     x = np.random.normal(0, 1)  # * get_vth(local_temperature) / c
     x = 0
 
-    N = 1000
+    N = 100000
 
     p_history = np.zeros([N, 3]) * np.nan
     p_history[0, :] = p
@@ -69,7 +69,7 @@ for iii in range(nsim):
     x_history[0] = x
 
     d_absorbed = 0
-    d = np.linspace(0, 1, 100000)
+    d = np.concatenate([[0], np.logspace(-10, 0, 100000)])
 
     proper_redistribution = False
 
@@ -88,18 +88,18 @@ for iii in range(nsim):
         sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
         q = np.random.rand()
         d_absorbed = interp_d(d, sf, q)  # randomly selecting absorption point
-        # while (d_absorbed == d.max()) & (d.max() < geom.R * 2):
-        #     # print('Expanding!')
-        #     d *= 2
-        #     l, d = get_trajectory(p, k, d)  # searching for a trajectory
-        #     sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
-        #     d_absorbed = interp_d(d, sf, q)
-        # while d_absorbed < d[32]:
-        #     # print('Refining!')
-        #     d /= 2
-        #     l, d = get_trajectory(p, k, d)  # searching for a trajectory
-        #     sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
-        #     d_absorbed = interp_d(d, sf, q)
+        while (d_absorbed == d.max()) & (d.max() < geom.R * 2):
+            # print('Expanding!')
+            d *= 2
+            l, d = get_trajectory(p, k, d)  # searching for a trajectory
+            sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
+            d_absorbed = interp_d(d, sf, q)
+        while d_absorbed < d[5000]:
+            # print('Refining!')
+            d /= 2
+            l, d = get_trajectory(p, k, d)  # searching for a trajectory
+            sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
+            d_absorbed = interp_d(d, sf, q)
         p_new = get_shift(p, k, d_absorbed)  # extracting new position
         if np.sum(p_new ** 2) < geom.R ** 2:
             # The environment of new scattering
@@ -107,7 +107,7 @@ for iii in range(nsim):
             local_temperature_new = geom.temperature(p_new.reshape(1, -1))  # new local temperature
             # selecting a random atom
             v_atom = local_velocity_new + \
-                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, mode='none', N=1000) + \
+                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, mode='direct', N=1000) + \
                      get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
             # generating new direction and new frequency
             if proper_redistribution:
