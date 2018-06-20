@@ -77,7 +77,7 @@ for iii in range(nsim):
 
     while (d_absorbed < d.max()) & (i < N - 2):
         i += 1
-        print(i, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
+        # print(i, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
         # define initial parameters
         p = p_history[i, :].copy()  # position
         k = k_history[i, :].copy()  # direction
