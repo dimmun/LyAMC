@@ -8,7 +8,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [10., 1e4, 0.32, 0.0, 0.0, 200.0]
+params = [10., 1e4, 0.33, 0.0, 0.0, 200.0]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
@@ -78,7 +78,7 @@ plt.show()
 
 dat = np.genfromtxt('R19_V200.dat', skip_header=2)
 
-bins = np.linspace(-1, 1, 32)
+bins = np.linspace(-1, 1, 64)
 
 # geom = 'Zheng_sphere'
 # params = [10., 2e4, 0.324, 0.0, 0.0, 200.0]

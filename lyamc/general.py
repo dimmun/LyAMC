@@ -63,23 +63,26 @@ def read_last(geom, params):
     k = temp['k'].copy()
     x = temp['x'].copy()
     p = temp['p'].copy()
+    i = temp['i'].copy()
     for si in s[1:]:
         temp = np.load(si)
         k = np.concatenate([k, temp['k']])
         x = np.concatenate([x, temp['x']])
         p = np.concatenate([p, temp['p']])
+        i = np.concatenate([p, temp['i']])
     # x = np.array(x).reshape(-1,1)
     # k = np.array(k).reshape(-
     filename = str(np.random.rand())[2:]
     np.savez('output/' + decodename(geom, params) + '_%s_last.npz' % filename,
              p=p,
              k=k,
-             x=x)
+             x=x,
+             i=i)
     for si in s:
         os.system('rm -f ' + si)
     direction = npsumdot(k, [0, 0, 1])
     print(len(x))
-    return x, k, direction
+    return x, k, direction, i
 
 def decodename(geom, params, sep='_'):
     if len(params) == 6:
