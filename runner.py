@@ -41,6 +41,7 @@ else:
 p_last = []
 k_last = []
 x_last = []
+i_last = []
 
 z_map_list = np.linspace(-geom.R * 10, geom.R * 10, 1000)
 z_map = np.zeros([len(z_map_list) - 1, 3])
@@ -147,9 +148,11 @@ for iii in range(nsim):
     p_last.append(p_history[i + 1, :])
     k_last.append(k_history[i + 1, :])
     x_last.append(x_history[i + 1])
+    i_last.append(i + 1)
 
 filename = str(np.random.rand())[2:]
 np.savez('output/' + decodename(args.geometry[0], args.params) + '_%s_last.npz' % filename,
          p=p_last,
          k=k_last,
-         x=x_last)
+         x=x_last,
+         i=i_last)

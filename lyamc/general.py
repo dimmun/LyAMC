@@ -57,7 +57,6 @@ def sigmaax(T, x):
     return 5.9e-14 * (T / 1e4) ** -0.5 * H_fit(anu, x)
 
 
-@jit(nopython=True)
 def read_last(geom, params):
     s = glob.glob('output/' + decodename(geom, params, sep='_') + '*last*npz')
     temp = np.load(s[0])
