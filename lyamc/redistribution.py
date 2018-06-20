@@ -1,3 +1,4 @@
+from numba import jit
 from scipy import integrate
 
 from lyamc.general import *
@@ -78,7 +79,17 @@ def get_lookup_table_for_par_velocity(T):
     '''
 
 
-def get_par_velocity_of_atom(nu, T, u, n, mode='direct', N=10000):
+def integrand_for_par_vel(v, args):
+    '''
+
+    :return:
+    '''
+    vth, nu, umod = args
+    return np.exp(-(v) ** 2 / vth ** 2) / ((nu * (1 - (v + umod) / c) - nua) ** 2 + (ALYA / 16 / np.pi ** 2) ** 2)
+
+
+@jit(nopython=False)
+def get_par_velocity_of_atom(nu, T, u, n):
     '''
     Generates a parallel component for the velocity of the atom.
 
@@ -91,43 +102,40 @@ def get_par_velocity_of_atom(nu, T, u, n, mode='direct', N=10000):
     x = get_x(nu, T)
     vth = get_vth(T)
     a = 4.7e-4 * (T / 1e4) ** -0.5
-    if mode == 'direct':
-        umod = np.dot(u, n)
-        q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (
-        (nu * (1 - (v + umod) / c) - nua) ** 2 + (ALYA / 16 / np.pi ** 2) ** 2)
-        I = lambda w: integrate.quad(q, w[0], w[1], )[0]
-        w_list = np.linspace(-5 * vth, 5 * vth, 32)
-        res = np.zeros(len(w_list))
-        for i in range(len(w_list) - 1):
-            res[i + 1] = I([w_list[i], w_list[i + 1]])
-        res = np.cumsum(res)
-        res /= res[-1]
-        r = np.random.rand()
-        return n * np.interp(r, res, w_list)
-    elif mode == 'fast':
-        return 0
-    elif mode == 'direct_old':
-        umod = np.dot(u, n)
-        q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (a ** 2 + (x - (v + umod) / c) ** 2)
-        I = lambda w: integrate.quad(q, w[0], w[1], limit=1000)[0]
-        w_list = np.linspace(-5 * vth, 5 * vth, 1000)
-        res = np.zeros(len(w_list))
-        for i in range(len(w_list) - 1):
-            res[i + 1] = I([w_list[i], w_list[i + 1]])
-        res = np.cumsum(res)
-        res /= res[-1]
-        r = np.random.rand()
-        return n * np.interp(r, res, w_list)
-    elif mode == 'fast_old':
-        # DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
-        # a = DeltanuL / 2. / DeltanuD
-        v_par = np.random.normal(loc=0, scale=1., size=N) * get_vth(T) / np.sqrt(2)
-        r = np.random.rand(N)
-        temp = a ** 2 / ((x - (np.dot(u, n) + v_par) / c) ** 2 + a ** 2)
-        if temp.max() < 10. / N:
-            temp /= temp.max()
-        r = r < temp
-        return n * v_par[r][0]
+    umod = np.dot(u, n)
+    # I = lambda w: integrate.quad(q, w[0], w[1], )[0]
+    w_list = np.linspace(-5 * vth, 5 * vth, 32)
+    res = np.zeros(len(w_list))
+    for i in range(len(w_list) - 1):
+        res[i + 1] = integrate.quad(integrand_for_par_vel, a=w_list[i], b=w_list[i + 1], args=[vth, nu, umod])[0]
+    res = np.cumsum(res)
+    res /= res[-1]
+    r = np.random.rand()
+    return n * np.interp(r, res, w_list)
+    # elif mode == 'fast':
+    #     return 0
+    # elif mode == 'direct_old':
+    #     umod = np.dot(u, n)
+    #     q = lambda v: a ** 2 * np.exp(-(v) ** 2 / vth ** 2) / (a ** 2 + (x - (v + umod) / c) ** 2)
+    #     I = lambda w: integrate.quad(q, w[0], w[1], limit=1000)[0]
+    #     w_list = np.linspace(-5 * vth, 5 * vth, 1000)
+    #     res = np.zeros(len(w_list))
+    #     for i in range(len(w_list) - 1):
+    #         res[i + 1] = I([w_list[i], w_list[i + 1]])
+    #     res = np.cumsum(res)
+    #     res /= res[-1]
+    #     r = np.random.rand()
+    #     return n * np.interp(r, res, w_list)
+    # elif mode == 'fast_old':
+    #     # DeltanuD = nua * np.sqrt(T / c ** 2 / mp_over_2kB)
+    #     # a = DeltanuL / 2. / DeltanuD
+    #     v_par = np.random.normal(loc=0, scale=1., size=N) * get_vth(T) / np.sqrt(2)
+    #     r = np.random.rand(N)
+    #     temp = a ** 2 / ((x - (np.dot(u, n) + v_par) / c) ** 2 + a ** 2)
+    #     if temp.max() < 10. / N:
+    #         temp /= temp.max()
+    #     r = r < temp
+    #     return n * v_par[r][0]
 
 
 def get_perp_velocity_of_atom(nu, T, u, n):

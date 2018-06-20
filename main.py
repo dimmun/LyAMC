@@ -15,14 +15,14 @@ params = [10., 1e4, 0.33, 0.0, 0.0, 200.0]
 
 N_per_node = 28
 N_per_proc = 100
-N_nodes = 50
+N_nodes = 32
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --output=trash/%%j.out
 #SBATCH --error=trash/%%j.err
 #SBATCH --ntasks-per-node=28
-#SBATCH --time=1:00:00
+#SBATCH --time=24:00:00
 #SBATCH --export=all
 
 conda activate cfastpm

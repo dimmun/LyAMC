@@ -46,7 +46,7 @@ z_map_list = np.linspace(-geom.R * 10, geom.R * 10, 1000)
 z_map = np.zeros([len(z_map_list) - 1, 3])
 
 
-for iii in range(nsim):
+def simulation(geom):
     # p = [0, 0, 0]  # position in pc
     p = geom.get_IC()
 
@@ -69,7 +69,7 @@ for iii in range(nsim):
     x_history[0] = x
 
     d_absorbed = 0
-    d = np.concatenate([[0], np.logspace(-10, 0, 100000)])
+    d = np.concatenate([[0], np.logspace(-10, 0, 1000)])
 
     proper_redistribution = False
 
@@ -94,7 +94,7 @@ for iii in range(nsim):
             l, d = get_trajectory(p, k, d)  # searching for a trajectory
             sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
             d_absorbed = interp_d(d, sf, q)
-        while d_absorbed < d[5000]:
+        while d_absorbed < d[100]:
             # print('Refining!')
             d /= 2
             l, d = get_trajectory(p, k, d)  # searching for a trajectory
@@ -107,7 +107,7 @@ for iii in range(nsim):
             local_temperature_new = geom.temperature(p_new.reshape(1, -1))  # new local temperature
             # selecting a random atom
             v_atom = local_velocity_new + \
-                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, mode='direct', N=1000) + \
+                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k) + \
                      get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
             # generating new direction and new frequency
             if proper_redistribution:
@@ -135,12 +135,15 @@ for iii in range(nsim):
             x_history[i + 1] = x_new
         else:
             i = i - 1
-
     print(i)
+    return i, p_history, k_history, x_history
 
+
+for iii in range(nsim):
     # filename = str(np.random.rand())[2:]
     # np.savez('output/' + decodename(args.geometry[0], args.params) + '_%s.npz' % filename, p=p_history[:i + 2],
     #          k=k_history[:i + 2], x=x_history[:i + 2])
+    i, p_history, k_history, x_history = simulation(geom)
     p_last.append(p_history[i + 1, :])
     k_last.append(k_history[i + 1, :])
     x_last.append(x_history[i + 1])

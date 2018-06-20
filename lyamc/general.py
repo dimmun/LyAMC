@@ -2,6 +2,7 @@ import glob
 import os
 
 import numpy as np
+from numba import jit
 
 import lyamc.cons as cons
 
@@ -19,6 +20,7 @@ sigmat = 6.65e-25  # cm^2
 mp_over_2kB = 60.57  # s^2 K / km^2
 
 
+@jit(nopython=True)
 def sigmaa0(T):
     '''
     Lyα absorption cross-section at line center
@@ -28,6 +30,7 @@ def sigmaa0(T):
     return 5.9e-14 * (T / 1e4) ** -0.5
 
 
+@jit(nopython=True)
 def H_fit(a, x):
     '''
     Analytical fir to Voight profile from Tasitsiomi (2006), copied from Lauren, Razoumov & Sommer-Larsen (2009)
@@ -41,6 +44,7 @@ def H_fit(a, x):
     return q * np.sqrt(np.pi) + np.exp(-x ** 2)
 
 
+@jit(nopython=True)
 def sigmaax(T, x):
     '''
     Lyα absorption cross-section for given x
@@ -52,6 +56,8 @@ def sigmaax(T, x):
     anu = 4.7e-4 * (T / 1e4) ** -0.5
     return 5.9e-14 * (T / 1e4) ** -0.5 * H_fit(anu, x)
 
+
+@jit(nopython=True)
 def read_last(geom, params):
     s = glob.glob('output/' + decodename(geom, params, sep='_') + '*last*npz')
     temp = np.load(s[0])
@@ -77,6 +83,7 @@ def read_last(geom, params):
     return x, k, direction
 
 
+@jit(nopython=True)
 def decodename(geom, params, sep='_'):
     if len(params) == 6:
         s = '%s %0.2f %.1e %0.2f %0.2f %0.2f %0.2f' % (
@@ -92,11 +99,13 @@ def decodename(geom, params, sep='_'):
 def npsumdot(x, y):
     '''Dot product for two arrays'''
     if len(x.shape) > 1:
-        return np.sum(x * y, axis=1)
+        t = np.sum(x * y, axis=1)
     else:
-        return np.dot(x, y)
+        t = np.dot(x, y)
+    return t
 
 
+@jit(nopython=True)
 def get_x(nu, T):
     '''returns dimensionless frequency for nu in Hz and T in K'''
     vth = get_vth(T)
@@ -104,6 +113,7 @@ def get_x(nu, T):
     return (nu - nua) / Deltanua
 
 
+@jit(nopython=True)
 def get_nu(x, T):
     '''returns nu in Hz given dimensionless frequency and T in K'''
     vth = get_vth(T)
@@ -111,6 +121,7 @@ def get_nu(x, T):
     return x * Deltanua + nua
 
 
+@jit(nopython=True)
 def get_vth(T):
     '''return vth in km/s for T in K
     IT IS VELOCITY DISPERSION TIMES SQRT(2)
@@ -118,6 +129,7 @@ def get_vth(T):
     return 0.1285 * np.sqrt(T)  # in km/s
 
 
+@jit(nopython=True)
 def get_a(T):
     '''
     :param T: temperature in K

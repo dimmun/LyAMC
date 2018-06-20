@@ -1,3 +1,4 @@
+from numba import jit
 from scipy.special import wofz
 
 from lyamc.general import *
@@ -5,17 +6,20 @@ from lyamc.general import *
 
 ### Voight profile functions:
 
+@jit(nopython=False)
 def G(x, alpha):
     """ Return Gaussian line shape at x with HWHM alpha """
     return np.sqrt(np.log(2) / np.pi) / alpha \
            * np.exp(-(x / alpha) ** 2 * np.log(2))
 
 
+@jit(nopython=False)
 def L(x, gamma):
     """ Return Lorentzian line shape at x with HWHM gamma """
     return gamma / np.pi / (x ** 2 + gamma ** 2)
 
 
+@jit(nopython=False)
 def V(x, alpha, gamma):
     """
     Return the Voigt line shape at x with Lorentzian component HWHM gamma
@@ -26,6 +30,7 @@ def V(x, alpha, gamma):
     return np.real(wofz((x + 1j * gamma) / sigma / np.sqrt(2))) / sigma / np.sqrt(2 * np.pi)
 
 
+@jit(nopython=False)
 def sigma(nu, T, u, k):
     '''
     Crossection sigma in 1/cm^2
@@ -41,8 +46,11 @@ def sigma(nu, T, u, k):
     # Deltanua = nua * vth / c
     # a = DeltanuL / 2.0 / Deltanua
     a = 4.7e-4 * (T / 1e4) ** -0.5  # Eq 53 from D's motes
-    return 1.045e-13 * (T / 1e4) ** -0.5 * V(x_new, alpha=1., gamma=a)
+    # return 1.045e-13 * (T / 1e4) ** -0.5 * V(x_new, alpha=1., gamma=a)
+    return sigmaax(T, x_new)
 
+
+@jit(nopython=False)
 def DtauDl(k, nu, v, T, ndens):
     '''
     d\tau / dl for l in pc
