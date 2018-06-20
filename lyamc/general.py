@@ -82,8 +82,6 @@ def read_last(geom, params):
     print(len(x))
     return x, k, direction
 
-
-@jit(nopython=True)
 def decodename(geom, params, sep='_'):
     if len(params) == 6:
         s = '%s %0.2f %.1e %0.2f %0.2f %0.2f %0.2f' % (

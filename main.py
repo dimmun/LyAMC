@@ -19,8 +19,8 @@ N_nodes = 32
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --output=trash/%%j.out
-#SBATCH --error=trash/%%j.err
+#SBATCH --output=trash/\%j.out
+#SBATCH --error=trash/\%j.err
 #SBATCH --ntasks-per-node=28
 #SBATCH --time=24:00:00
 #SBATCH --export=all
