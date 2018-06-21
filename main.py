@@ -77,6 +77,11 @@ plt.show()
 # Zheng Zheng
 
 dat = np.genfromtxt('R19_V200.dat', skip_header=2)
+# print(dat[:,0].mean())
+# dat = np.genfromtxt('R19_V100.dat', skip_header=2)
+# print(dat[:,0].mean())
+# dat = np.genfromtxt('R19_V050.dat', skip_header=2)
+# print(dat[:,0].mean())
 
 bins = np.linspace(-1, 1, 64)
 # bins = np.linspace(-15, 15, 64)
@@ -88,7 +93,7 @@ bins = np.linspace(-1, 1, 64)
 # t = plt.hist(direction[filt], 64, normed=True, histtype='step', label='200')
 
 geom = 'Zheng_sphere'
-params = [10., 1e4, 0.32, 0.0, 0.0, 200.0]
+params = [10., 1e4, 0.32, 0.0, 0.0, 200.02]
 # params = [10., 1e4, 1.17, 0.0, 0.0, 200.0]
 x, k, direction, i = read_last(geom, params=params)
 filt = np.abs(direction) > 0

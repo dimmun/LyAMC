@@ -105,6 +105,15 @@ def npsumdot(x, y):
     return t
 
 
+def npsumdot2(x, y):
+    '''Dot product for two arrays'''
+    if len(x.shape) > 1:
+        t = np.sum(x, axis=1)
+    else:
+        t = np.dot(x, y)
+    return t
+
+
 @jit(nopython=True)
 def get_x(nu, T):
     '''returns dimensionless frequency for nu in Hz and T in K'''
