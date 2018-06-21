@@ -80,7 +80,7 @@ def simulation(geom):
         d = np.concatenate([[0], np.logspace(-10, 0, 10000)])
         # d = np.linspace()
         i += 1
-        # print(i, d_absorbed, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
+        print(i, d_absorbed, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
         # define initial parameters
         p = p_history[i, :].copy()  # position
         k = k_history[i, :].copy()  # direction

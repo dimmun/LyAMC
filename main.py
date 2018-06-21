@@ -8,14 +8,14 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [10., 1e4, 0.324, 0.0, 0.0, 200.02]
+params = [10., 1e4, 0.324, 0.0, 0.0, 200.]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
 
 N_per_node = 28
-N_per_proc = 3
-N_nodes = 24
+N_per_proc =
+N_nodes = 28
 
 s = """#!/bin/bash
 #SBATCH --nodes=1

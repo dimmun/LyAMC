@@ -119,10 +119,12 @@ def get_par_velocity_of_atom(nu, T, u, n):
     a = 4.7e-4 * (T / 1e4) ** -0.5
     umod = np.dot(u, n)
     # I = lambda w: integrate.quad(q, w[0], w[1], )[0]
-    w_list = np.linspace(-10 * vth, 10 * vth, 32)
+    # w_list = np.linspace(-10 * vth, 10 * vth, 1024)
+    w_list = np.sort(np.concatenate([np.linspace(-7 * vth, 7 * vth, 100), -umod / vth + np.linspace(-5, 5, 100)]))
     res = np.zeros(len(w_list))
     for i in range(len(w_list) - 1):
-        res[i + 1] = integrate.quad(integrand_for_par_vel, a=w_list[i], b=w_list[i + 1], args=[vth, nu, umod])[0]
+        res[i + 1] = \
+        integrate.quad(integrand_for_par_vel, a=w_list[i], b=w_list[i + 1], args=[vth, nu, umod], limit=10)[0]
     res = np.cumsum(res)
     res /= res[-1]
     r = np.random.rand()
