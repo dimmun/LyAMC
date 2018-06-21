@@ -6,12 +6,13 @@ from lyamc.general import *
 ALYA = 6.2648e+8
 
 
+@jit(nopython=False)
 def rotation_matrix(axis, theta):
     """
     Return the rotation matrix associated with counterclockwise rotation about
     the given axis by theta radians.
     """
-    axis = np.asarray(axis)
+    # axis = np.asarray(axis)
     axis = axis / np.sqrt(np.dot(axis, axis))
     a = np.cos(theta / 2.0)
     b, c, d = -axis * np.sin(theta / 2.0)
@@ -22,6 +23,7 @@ def rotation_matrix(axis, theta):
                      [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc]])
 
 
+@jit(nopython=False)
 def rotate_by_theta(n, theta):
     '''rotates vector n by theta in random direction'''
     axis = np.random.randn(3)
@@ -30,6 +32,7 @@ def rotate_by_theta(n, theta):
     return np.dot(rotation_matrix(axis, theta), n)
 
 
+@jit(nopython=False)
 def random_n(n, mode='Rayleigh'):
     ''' Returns a new direction for the photon
     '''
@@ -47,18 +50,21 @@ def random_n(n, mode='Rayleigh'):
         print('error')
 
 
+@jit(nopython=False)
 def get_g(T):
     '''returns g for T in K'''
     return 2.6e-4 * (T / 1e4) ** -0.5
 
 
+@jit(nopython=False)
 def get_xout(xin, v, kin, kout, mu, T):
     '''Equation 65'''
     g = get_g(T)
     vth = get_vth(T)
-    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth + g * (mu - 1)
+    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth  # + g * (mu - 1)
 
 
+@jit(nopython=False)
 def get_parallel_PDF(v, u, n, nu, T):
     v_par = npsumdot(v, n)
     u_par = npsumdot(u, n)
