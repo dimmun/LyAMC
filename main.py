@@ -14,7 +14,7 @@ params = [10., 1e4, 0.324, 0.0, 0.0, 200.]
 # params = [1e4, 10.]
 
 N_per_node = 28
-N_per_proc =
+N_per_proc = 1
 N_nodes = 28
 
 s = """#!/bin/bash

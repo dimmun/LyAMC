@@ -47,7 +47,7 @@ z_map_list = np.linspace(-geom.R * 10, geom.R * 10, 1000)
 z_map = np.zeros([len(z_map_list) - 1, 3])
 
 
-def simulation(geom):
+def simulation(geom, verbal=False):
     # p = [0, 0, 0]  # position in pc
     p = geom.get_IC()
 
@@ -80,7 +80,8 @@ def simulation(geom):
         d = np.concatenate([[0], np.logspace(-10, 0, 10000)])
         # d = np.linspace()
         i += 1
-        print(i, d_absorbed, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
+        if verbal:
+            print(i, d_absorbed, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
         # define initial parameters
         p = p_history[i, :].copy()  # position
         k = k_history[i, :].copy()  # direction
