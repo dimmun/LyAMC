@@ -8,7 +8,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [10., 1e4, 0.324, 0.0, 0.0, 200.01]
+params = [10., 1e4, 0.324, 0.0, 0.0, 200.02]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]

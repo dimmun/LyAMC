@@ -70,6 +70,7 @@ def simulation(geom):
     x_history[0] = x
 
     d_absorbed = 0
+    d = np.concatenate([[0], np.logspace(-10, 0, 10000)])
 
     proper_redistribution = False
 
@@ -77,9 +78,9 @@ def simulation(geom):
 
     while (d_absorbed < d.max()) & (i < N - 2):
         d = np.concatenate([[0], np.logspace(-10, 0, 10000)])
-        d = np.linspace()
+        # d = np.linspace()
         i += 1
-        # print(i, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
+        # print(i, d_absorbedx, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
         # define initial parameters
         p = p_history[i, :].copy()  # position
         k = k_history[i, :].copy()  # direction
