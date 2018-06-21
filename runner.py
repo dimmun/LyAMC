@@ -70,13 +70,14 @@ def simulation(geom):
     x_history[0] = x
 
     d_absorbed = 0
-    d = np.concatenate([[0], np.logspace(-10, 0, 1000)])
 
     proper_redistribution = False
 
     i = -1
 
     while (d_absorbed < d.max()) & (i < N - 2):
+        d = np.concatenate([[0], np.logspace(-10, 0, 10000)])
+        d = np.linspace()
         i += 1
         # print(i, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
         # define initial parameters
@@ -95,7 +96,7 @@ def simulation(geom):
             l, d = get_trajectory(p, k, d)  # searching for a trajectory
             sf = get_survival_function(nu, l, d, k, geom)  # getting surfvival function
             d_absorbed = interp_d(d, sf, q)
-        while d_absorbed < d[100]:
+        while d_absorbed < d[6000]:
             # print('Refining!')
             d /= 2
             l, d = get_trajectory(p, k, d)  # searching for a trajectory
