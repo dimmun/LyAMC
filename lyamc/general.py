@@ -69,7 +69,7 @@ def read_last(geom, params):
         k = np.concatenate([k, temp['k']])
         x = np.concatenate([x, temp['x']])
         p = np.concatenate([p, temp['p']])
-        i = np.concatenate([p, temp['i']])
+        i = np.concatenate([i, temp['i']])
     # x = np.array(x).reshape(-1,1)
     # k = np.array(k).reshape(-
     filename = str(np.random.rand())[2:]
