@@ -55,8 +55,8 @@ np.savez('a_%0.10f.npz' % a, x_list=x_list, s_list=s_list, p_list=p_list, ltab=l
 # plt.pcolor(ltab[500:750, 500:750])
 # plt.show()
 #
-# plt.plot(p_list, ltab[210,:], '.')
-# plt.show()
+plt.plot(p_list, ltab[210, :], '.')
+plt.show()
 #
 #
 # ############################

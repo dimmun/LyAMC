@@ -104,7 +104,7 @@ def integrand_for_par_vel_old(v, args):
 
 
 @jit(nopython=False)
-def get_par_velocity_of_atom(nu, T, u, n):
+def get_par_velocity_of_atom(nu, T, u, n, f_ltab, mode='integral'):
     '''
     Generates a parallel component for the velocity of the atom.
 
@@ -114,21 +114,33 @@ def get_par_velocity_of_atom(nu, T, u, n):
     :param n:  photon direction
     :return:   vector parallel to
     '''
-    x = get_x(nu, T)
-    vth = get_vth(T)
-    a = 4.7e-4 * (T / 1e4) ** -0.5
-    umod = np.dot(u, n)
-    # I = lambda w: integrate.quad(q, w[0], w[1], )[0]
-    # w_list = np.linspace(-10 * vth, 10 * vth, 1024)
-    w_list = np.sort(np.concatenate([np.linspace(-7 * vth, 7 * vth, 100), -umod / vth + np.linspace(-5, 5, 100)]))
-    res = np.zeros(len(w_list))
-    for i in range(len(w_list) - 1):
-        res[i + 1] = \
-        integrate.quad(integrand_for_par_vel, a=w_list[i], b=w_list[i + 1], args=[vth, nu, umod], limit=10)[0]
-    res = np.cumsum(res)
-    res /= res[-1]
-    r = np.random.rand()
-    return n * np.interp(r, res, w_list)
+    if mode == 'integral':
+        x = get_x(nu, T)
+        vth = get_vth(T)
+        a = 4.7e-4 * (T / 1e4) ** -0.5
+        umod = np.dot(u, n)
+        # I = lambda w: integrate.quad(q, w[0], w[1], )[0]
+        # w_list = np.linspace(-10 * vth, 10 * vth, 1024)
+        w_list = np.sort(np.concatenate([np.linspace(-7 * vth, 7 * vth, 100), -umod / vth + np.linspace(-5, 5, 100)]))
+        res = np.zeros(len(w_list))
+        for i in range(len(w_list) - 1):
+            res[i + 1] = \
+                integrate.quad(integrand_for_par_vel, a=w_list[i], b=w_list[i + 1], args=[vth, nu, umod], limit=10)[0]
+        res = np.cumsum(res)
+        res /= res[-1]
+        r = np.random.rand()
+        return n * np.interp(r, res, w_list)
+    elif mode == 'lookup':
+        r = np.random.rand()
+        vth = get_vth(T)
+        umod = np.dot(u, n)
+        x = get_x(nu * (1 + umod / c), T)
+        if x > 0:
+            return n * f_ltab(r, x) * vth
+        else:
+            return n * -1. * f_ltab(r, -x) * vth
+
+
     # elif mode == 'fast':
     #     return 0
     # elif mode == 'direct_old':

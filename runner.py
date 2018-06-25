@@ -8,6 +8,8 @@ parser.add_argument('geometry', metavar='geom', type=str, nargs=1,
 parser.add_argument('params', metavar='params', type=float, nargs='+',
                     help='geometry name')
 
+from scipy import interpolate
+
 args = parser.parse_args()
 
 nsim = args.nsim[0]
@@ -16,6 +18,7 @@ print(args.geometry)
 from lyamc.redistribution import *
 from lyamc.trajectory import *
 from lyamc.coordinates import *
+from lyamc.cons import *
 
 m_hz = 2.2687318181383202e+23
 
@@ -76,6 +79,15 @@ def simulation(geom, verbal=False):
 
     i = -1
 
+    # Loading parallel velocity intepolation table
+    a = ALYA / 4 / np.pi / (NULYA * get_vth(local_temperature) / c)
+    a_data = np.load('a_%0.10f.npz' % a)
+    a_x_list = a_data['x_list']
+    a_s_list = a_data['s_list']
+    a_p_list = a_data['p_list']
+    a_ltab = a_data['ltab']
+    f_ltab = interpolate.interp2d(a_p_list, a_x_list, a_ltab, kind='linear')
+
     while (d_absorbed < d.max()) & (i < N - 2):
         d = np.concatenate([[0], np.logspace(-10, 0, 10000)])
         # d = np.linspace()
@@ -111,7 +123,7 @@ def simulation(geom, verbal=False):
             local_temperature_new = geom.temperature(p_new.reshape(1, -1))  # new local temperature
             # selecting a random atom
             v_atom = local_velocity_new + \
-                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k) + \
+                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, f_ltab, mode='lookup') + \
                      get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
             # generating new direction and new frequency
             if proper_redistribution:
