@@ -12,3 +12,14 @@ def Dijkstra_sphere_test(x, a, tau0):
     '''
     return np.sqrt(np.pi) / np.sqrt(24) / a / tau0 * x ** 2 / (
         1. + np.cosh(np.sqrt(2. * np.pi / 27) * np.abs(x) ** 3 / a / tau0))
+
+
+def Neufeld(x, tau, a):
+    '''
+    See Dijkstra's notes Eq 92
+    :param x:
+    :param tau:
+    :return:
+
+    '''
+    np.sqrt(6) / 24. / np.sqrt(np.pi) / a / tau0
