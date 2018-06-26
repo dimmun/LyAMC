@@ -123,7 +123,8 @@ def simulation(geom, verbal=False):
             local_temperature_new = geom.temperature(p_new.reshape(1, -1))  # new local temperature
             # selecting a random atom
             v_atom = local_velocity_new + \
-                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, f_ltab, mode='lookup') + \
+                     get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, f_ltab,
+                                              mode='integral') + \
                      get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
             # generating new direction and new frequency
             if proper_redistribution:
