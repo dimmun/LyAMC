@@ -75,7 +75,7 @@ def simulation(geom, verbal=False):
     d_absorbed = 0
     d = np.concatenate([[0], np.logspace(-10, 0, 10000)])
 
-    proper_redistribution = False
+    proper_redistribution = True
 
     i = -1
 
