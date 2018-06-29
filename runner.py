@@ -50,7 +50,8 @@ z_map_list = np.linspace(-geom.R * 10, geom.R * 10, 1000)
 z_map = np.zeros([len(z_map_list) - 1, 3])
 
 
-def simulation(geom, verbal=False):
+def simulation(geom, verbal=True):
+    # np.random.seed(4)
     # p = [0, 0, 0]  # position in pc
     p = geom.get_IC()
 
@@ -124,7 +125,7 @@ def simulation(geom, verbal=False):
             # selecting a random atom
             v_atom = local_velocity_new + \
                      get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, f_ltab,
-                                              mode='integral') + \
+                                              mode='lookup') + \
                      get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
             # generating new direction and new frequency
             if proper_redistribution:

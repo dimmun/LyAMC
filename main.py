@@ -8,7 +8,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [20., 1e4, 0.324, 0.0, 0.0, 200.04]
+params = [1., 2e4, 0.33, 0.0, 0.0, 0.0]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
@@ -72,6 +72,30 @@ t = plt.hist(direction[filt], 32, normed=True, histtype='step', label='50')
 
 plt.show()
 
+####
+
+
+
+dat00 = np.genfromtxt('R18_A0.00.dat', skip_header=2)
+# dat05 = np.genfromtxt('R19_A0.00.dat', skip_header=2)
+
+
+bins = np.linspace(-1, 1, 256)
+bins = np.linspace(0, 300000, 32)
+
+geom = 'Zheng_sphere'
+params = [1., 2e4, 0.33, 0.0, 0.0, 0.0]
+x, k, direction, i = read_last(geom, params=params)
+filt = np.abs(i) < 300000
+t = plt.hist(i[filt], bins, normed=True, cumulative=False, histtype='step', label='50')
+
+filt = np.abs(dat00[:, 0]) < 300000
+plt.hist(dat00[filt, 0], bins, histtype='step', cumulative=False, normed=True);
+
+# filt = np.abs(dat05[:, 3]) > 0.0
+# plt.hist(dat05[filt, 0], bins, histtype='step', normed=True);
+
+plt.show()
 ###
 
 # Zheng Zheng
@@ -93,13 +117,14 @@ bins = np.linspace(-35, 15, 64)
 # t = plt.hist(direction[filt], 64, normed=True, histtype='step', label='200')
 
 geom = 'Zheng_sphere'
-params = [10., 1e4, 0.32, 0.0, 0.0, 200.01]
+params = [10., 1e4, 0.32, 0.0, 0.0, 200.05]
 # params = [10., 1e4, 1.17, 0.0, 0.0, 200.0]
 x, k, direction, i = read_last(geom, params=params)
-# filt = np.abs(direction) > 0.9
-t = plt.hist(x, bins, normed=True, histtype='step', label='100')
+filt = np.abs(direction) > 0.9
+t = plt.hist(x[filt], bins, normed=True, histtype='step', label='100')
 
-plt.hist(dat[:, 6], bins, histtype='step', normed=True);
+filt = np.abs(dat[:, 3]) > 0.9
+plt.hist(dat[filt, 6], bins, histtype='step', normed=True);
 
 # geom = 'Zheng_sphere'
 # params =  [10., 2e4, 0.324, 0.0, 0.0, 0.0]

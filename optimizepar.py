@@ -10,7 +10,7 @@ def f(u, a, x):
 from lyamc.cons import *
 from lyamc.general import *
 
-a = ALYA / 4 / np.pi / (NULYA * get_vth(1e4) / c)
+a = ALYA / 4 / np.pi / (NULYA * get_vth(2e4) / c)
 
 x_list = np.linspace(0, 12, 2000)
 s_list = np.linspace(-5, 5, 2000)
