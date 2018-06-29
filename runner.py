@@ -50,7 +50,7 @@ z_map_list = np.linspace(-geom.R * 10, geom.R * 10, 1000)
 z_map = np.zeros([len(z_map_list) - 1, 3])
 
 
-def simulation(geom, verbal=True):
+def simulation(geom, verbal=False):
     # np.random.seed(4)
     # p = [0, 0, 0]  # position in pc
     p = geom.get_IC()
