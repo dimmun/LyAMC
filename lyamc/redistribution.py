@@ -132,11 +132,12 @@ def get_par_velocity_of_atom(nu, T, u, n, f_ltab, mode='integral'):
         r = np.random.rand()
         return n * np.interp(r, res, w_list)
     elif mode == 'lookup':
-        r = np.random.rand()
+        r = np.random.normal()
+        # print(r)
         vth = get_vth(T)
         umod = np.dot(u, n)
         x = get_x(nu * (1 + umod / c), T)
-        if x > 0:
+        if x <= 0:
             return n * f_ltab(r, x) * vth
         else:
             return n * -1. * f_ltab(r, -x) * vth
