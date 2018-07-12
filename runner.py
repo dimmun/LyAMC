@@ -199,10 +199,7 @@ for iii in range(nsim):
     proper_redistribution = True
 
     i = -1
-
     # Loading parallel velocity intepolation table
-
-
     while (d_absorbed < d.max()) & (i < N - 2):
         d = np.concatenate([[0], np.logspace(-10, 0, 10000)])
         # d = np.linspace()
@@ -268,12 +265,10 @@ for iii in range(nsim):
         else:
             i = i - 1
     print(i)
-
-
     # filename = str(np.random.rand())[2:]
     # np.savez('output/' + decodename(args.geometry[0], args.params) + '_%s.npz' % filename, p=p_history[:i + 2],
     #          k=k_history[:i + 2], x=x_history[:i + 2])
-    i, p_history, k_history, x_history = simulation(geom)
+    # i, p_history, k_history, x_history = simulation(geom)
     p_last.append(p_history[i + 1, :])
     k_last.append(k_history[i + 1, :])
     x_last.append(x_history[i + 1])
