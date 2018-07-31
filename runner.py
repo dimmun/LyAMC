@@ -178,10 +178,10 @@ a_p_list = a_data['p_list']
 a_ltab = a_data['ltab']
 f_ltab = interpolate.interp2d(a_p_list, a_x_list, a_ltab, kind='linear', bounds_error=True)
 
-np.random.seed(4)
+# np.random.seed(4)
 
 for iii in range(nsim):
-    verbal = True
+    verbal = False
     p = geom.get_IC()
 
     local_temperature = geom.temperature(p)
