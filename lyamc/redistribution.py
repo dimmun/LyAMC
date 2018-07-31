@@ -1,9 +1,11 @@
 from numba import jit
 from scipy import integrate
 
+from lyamc.cons import *
 from lyamc.general import *
 
-ALYA = 6.2648e+8
+
+# ALYA = 6.2648e+8
 
 
 @jit(nopython=False)
@@ -61,7 +63,7 @@ def get_xout(xin, v, kin, kout, mu, T):
     '''Equation 65'''
     g = get_g(T)
     vth = get_vth(T)
-    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth  + g * (mu - 1)
+    return xin - np.dot(v, kin) / vth + np.dot(v, kout) / vth + g * (mu - 1)
 
 
 @jit(nopython=False)
@@ -130,17 +132,22 @@ def get_par_velocity_of_atom(nu, T, u, n, f_ltab, mode='integral'):
         res = np.cumsum(res)
         res /= res[-1]
         r = np.random.rand()
+        print(r)
         return n * np.interp(r, res, w_list)
     elif mode == 'lookup':
-        r = np.random.normal()
+        r = np.random.rand()
         # print(r)
         vth = get_vth(T)
         umod = np.dot(u, n)
-        x = get_x(nu * (1 + umod / c), T)
-        if x <= 0:
-            return n * f_ltab(r, x) * vth
-        else:
-            return n * -1. * f_ltab(r, -x) * vth
+        x = get_x(nu * (1 + umod / c), T)[0]
+        # print(r, x)
+        return f_ltab(r, x)
+        # if x > 0:
+        #     print(f_ltab(r, x))
+        #     return n * f_ltab(r, x) * vth / np.sqrt(2)
+        # else:
+        #     print(-f_ltab(r, -x))
+        #     return n * -1. * f_ltab(r, -x) * vth
 
 
     # elif mode == 'fast':
@@ -172,14 +179,17 @@ def get_par_velocity_of_atom(nu, T, u, n, f_ltab, mode='integral'):
 def get_perp_velocity_of_atom(nu, T, u, n):
     '''
 
-    :param nu:
-    :param T:
-    :param u:
-    :param n:
-    :return:
+    Drawing a random velocity of an atom in a direction perpendicular to the current LOS.
+
+    :param nu: frequency TODO: unused!
+    :param T:  temperature
+    :param u:  velocity  TODO: unused!
+    :param n:  direction of the LOS
+    :return:   3-vector of the velocity component perpendicular to the LOS
     '''
     vth = get_vth(T)
     v_perp = np.random.normal(loc=0, scale=1., size=2) * vth / np.sqrt(2)
     direction0 = rotate_by_theta(n, np.pi / 2)
     direction1 = np.cross(direction0, n)
+    # TODO: Replace with a simpler approach without using cross
     return v_perp[0] * direction0 + v_perp[1] * direction1

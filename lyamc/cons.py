@@ -1,6 +1,12 @@
-import numpy as np
+"""
+
+This list of constans is copied from Teja's package.
+
+"""
+
 import astropy.constants as const
 import astropy.units as u
+import numpy as np
 
 NU21 = 1420.40575177e+6  # Frequency of the 1s hyperfine transition (Hz)
 # Wavelength of Lyman-alpha in cm, exact value is not super important since
