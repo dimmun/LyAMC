@@ -9,6 +9,8 @@ import argparse
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('nsim', metavar='nsim', type=int, nargs=1,
                     help='geometry name')
+parser.add_argument('randtype', metavar='randtype', type=str, nargs=1,
+                    help='')
 parser.add_argument('geometry', metavar='geom', type=str, nargs=1,
                     help='geometry name')
 parser.add_argument('params', metavar='params', type=float, nargs='+',
@@ -133,7 +135,7 @@ def simulation(geom, verbal=True):
             # selecting a random atom
             v_atom = local_velocity_new + \
                      get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, f_ltab,
-                                              mode='lookup') + \
+                                              mode=args.randtype[0]) + \
                      get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
             # generating new direction and new frequency
             if proper_redistribution:
@@ -178,10 +180,10 @@ a_p_list = a_data['p_list']
 a_ltab = a_data['ltab']
 f_ltab = interpolate.interp2d(a_p_list, a_x_list, a_ltab, kind='linear', bounds_error=True)
 
-# np.random.seed(4)
+np.random.seed(4)
 
 for iii in range(nsim):
-    verbal = False
+    verbal = True
     p = geom.get_IC()
 
     local_temperature = geom.temperature(p)
@@ -246,7 +248,7 @@ for iii in range(nsim):
             # selecting a random atom
             v_atom = local_velocity_new + \
                      get_par_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k, f_ltab,
-                                              mode='integral') + \
+                                              mode=args.randtype[0]) + \
                      get_perp_velocity_of_atom(nu, local_temperature_new, local_velocity_new, k)
             # generating new direction and new frequency
             if proper_redistribution:

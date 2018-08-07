@@ -16,8 +16,8 @@ a = ALYA / 4 / np.pi / (NULYA * get_vth(2e4) / c)
 
 factr = 1
 
-x_list = np.linspace(-8., 8.0, 201)
-s_list = np.linspace(-5, 5, 200)
+x_list = np.linspace(-8., 8.0, 2001)
+s_list = np.linspace(-5, 5, 800)
 p_list = (erf(s_list) + 1.) / 2.
 temp_list = np.linspace(0, 1, 200*factr)
 ltab = np.zeros([len(x_list), len(p_list)])
@@ -79,7 +79,7 @@ def ddf(x):
     u = 0.0
     nu = get_nu(x, T=2e4)
     w_list = np.sort(
-        np.concatenate([np.linspace(-7 * vth, 7 * vth, 1000), -u / vth + np.linspace(-0.2, 0.2, 100)]))
+        np.concatenate([np.linspace(-7 * vth, 7 * vth, 1000), -u / vth + np.linspace(-0.2, 0.2, 1000)]))
     res = np.zeros(len(w_list))
     for i in range(len(w_list) - 1):
         temp = integrate.quad(integrand_for_par_vel, a=w_list[i], b=w_list[i + 1], args=[vth, nu, u], limit=1000)
@@ -92,7 +92,7 @@ def ddf(x):
     return np.interp(p_list, res, w_list)
 
 
-p = Pool(4)
+p = Pool(24)
 res = p.map(ddf, x_list)
 
 ltab = np.array(res)

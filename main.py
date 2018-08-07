@@ -8,7 +8,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 0.31, 0.5, 0.0, 0.0]
+params = [1., 2e4, 0.32, 0.5, 0.0, 0.0]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
@@ -81,18 +81,23 @@ dat05 = np.genfromtxt('R18_A0.50.dat', skip_header=2)
 
 
 bins = np.linspace(-1, 1, 256)
-bins = np.linspace(0, 550000, 64)
+bins = np.linspace(0, 1500000, 128)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 0.31, 0.0, 0.0, 0.0]
+# params = [1., 2e4, 0.32, 0.5, 0.0, 0.0]
+# x, k, direction, i = read_last(geom, params=params)
+# filt = np.abs(i) < 150000
+# t = plt.hist(i[filt], bins, normed=False, cumulative=True, histtype='step', label='50')
+
+params = [1., 2e4, 0.33, 0.5, 0.0, 0.0]
 x, k, direction, i = read_last(geom, params=params)
-filt = np.abs(i) < 150000
-t = plt.hist(i[filt], bins, normed=True, cumulative=False, histtype='step', label='50')
+filt = np.abs(i) < 5000
+# t = plt.hist(i[filt], bins, normed=True, cumulative=True, histtype='step', label='50')
 
-filt = np.abs(dat00[:, 0]) < 550000
+filt = np.abs(dat00[:, 0]) < 1500000
 plt.hist(dat00[filt, 0], bins, histtype='step', cumulative=False, normed=True);
-
-filt = np.abs(dat05[:, 0]) < 550000
+#
+filt = np.abs(dat05[:, 0]) < 1500000
 plt.hist(dat05[filt, 0], bins, histtype='step', cumulative=False, normed=True);
 
 # filt = np.abs(dat05[:, 3]) > 0.0
