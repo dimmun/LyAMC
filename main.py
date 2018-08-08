@@ -9,13 +9,13 @@ from lyamc.general import *
 
 geom = 'Zheng_sphere'
 params = [1., 2e4, 0.324, 0.0, 0.0, 0.0]
-
+mode = 'zm'
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
 
 N_per_node = 28
-N_per_proc = 1
-N_nodes = 32
+N_per_proc = 100
+N_nodes = 10
 
 s = """#!/bin/bash
 #SBATCH --nodes=1
@@ -30,7 +30,7 @@ conda activate cfastpm
 """
 
 for i in range(N_per_node):
-    s = s + """python runner.py %i """ % N_per_proc + decodename(geom, params, sep=' ') + """ &
+    s = s + """python runner.py %i %s """ % (N_per_proc, mode) + decodename(geom, params, sep=' ') + """ &
 """
 
 s += """wait

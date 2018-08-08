@@ -23,7 +23,7 @@ mp_over_2kB = 60.57  # s^2 K / km^2
 @jit(nopython=True)
 def sigmaa0(T):
     '''
-    Lyα absorption cross-section at line center
+    Ly-alpha absorption cross-section at line center
     :param T: temperature in K
     :return: cross-section at line center in cm^2
     '''
