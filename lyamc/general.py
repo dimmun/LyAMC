@@ -47,7 +47,7 @@ def H_fit(a, x):
 @jit(nopython=True)
 def sigmaax(T, x):
     '''
-    Lyα absorption cross-section for given x
+    Ly-alpha absorption cross-section for given x
     :param T: temperature in K
     :param x: temperature in K
     :return: cross-section at line center in cm^2
