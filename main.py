@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+# plt.plot([1])
+# plt.show()
 
 from lyamc.analytical import *
 from lyamc.general import *
@@ -8,13 +10,13 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 0.324, 0.0, 0.0, 0.0]
+params = [1., 2e4, 0.324, 0.5, 0.0, 0.0]
 mode = 'zm'
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
 
 N_per_node = 28
-N_per_proc = 100
+N_per_proc = 10
 N_nodes = 10
 
 s = """#!/bin/bash
@@ -48,12 +50,14 @@ for i in range(N_nodes):
 
 ###
 
-params = [1., 2e4, 0.0033, 0.0, 0.0, 0.0]
+params = [1., 2e4, 0.324, 0.0, 0.0, 0.0]
 x, k, direction, i = read_last(geom, params=params, mode='zm')
 
-params = [1., 2e4, 0.0033, 0.0, 0.0, 0.0]
+params = [1., 2e4, 0.324, 0.0, 0.0, 0.0]
 x2, k2, direction2, i2 = read_last(geom, params=params, mode='lookup')
 
+plt.hist([i[i<99998], i2[i2<99998]], histtype='step')
+plt.show()
 ###
 
 # Zheng Zheng
