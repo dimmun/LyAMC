@@ -57,8 +57,8 @@ def sigmaax(T, x):
     return 5.9e-14 * (T / 1e4) ** -0.5 * H_fit(anu, x)
 
 
-def read_last(geom, params):
-    s = glob.glob('output/' + decodename(geom, params, sep='_') + '*last*npz')
+def read_last(geom, params, mode):
+    s = glob.glob('output/' + decodename(geom, params, sep='_') + '*%s_last*npz'%mode)
     temp = np.load(s[0])
     k = temp['k'].copy()
     x = temp['x'].copy()
@@ -73,7 +73,7 @@ def read_last(geom, params):
     # x = np.array(x).reshape(-1,1)
     # k = np.array(k).reshape(-
     filename = str(np.random.rand())[2:]
-    np.savez('output/' + decodename(geom, params) + '_%s_last.npz' % filename,
+    np.savez('output/' + decodename(geom, params) + '_%s_%s_last.npz' % (filename, mode),
              p=p,
              k=k,
              x=x,

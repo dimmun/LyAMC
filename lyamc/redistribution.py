@@ -106,6 +106,15 @@ def integrand_for_par_vel_old(v, args):
 
 
 @jit(nopython=False)
+def p_zm(u0, x, a):
+    theta0 = np.arctan((u0 - x) / a)
+    return (theta0 + np.pi / 2) * \
+           ((1. - np.exp(-u0 ** 2)) * theta0 + \
+            (1. + np.exp(-u0 ** 2)) * np.pi / 2.) ** -1
+
+
+
+@jit(nopython=False)
 def get_par_velocity_of_atom(nu, T, u, n, f_ltab, mode='integral'):
     '''
     Generates a parallel component for the velocity of the atom.
@@ -141,13 +150,52 @@ def get_par_velocity_of_atom(nu, T, u, n, f_ltab, mode='integral'):
         umod = np.dot(u, n)
         x = get_x(nu * (1 + umod / c), T)[0]
         # print(r, x)
-        return f_ltab(r, x)
+        return n * f_ltab(r, x)
         # if x > 0:
         #     print(f_ltab(r, x))
         #     return n * f_ltab(r, x) * vth / np.sqrt(2)
         # else:
         #     print(-f_ltab(r, -x))
         #     return n * -1. * f_ltab(r, -x) * vth
+    elif mode == 'zm':
+        N = 10
+        u0 = np.dot(u, n)
+        x = get_x(nu, T)
+        vth = get_vth(T)
+        a = 4.7e-4 * (T / 1e4) ** -0.5
+        # if x > 0:
+        p = p_zm(u0, x, a)
+        theta0 = np.arctan((u0 - x) / a)
+        res = []
+        while len(res) == 0:
+            R = np.random.rand(N)
+            theta = np.random.rand(N)
+            theta[R < p] = theta[R < p] * (theta0 + np.pi / 2.) - np.pi / 2
+            theta[R >= p] = theta[R >= p] * (np.pi / 2. - theta0) + theta0
+            # theta = np.random.rand(N)*np.pi - np.pi/2.
+            u = a * np.tan(theta) + x
+            # g = g_zm(u0, u, x, a)
+            acc = np.random.rand(N)
+            res = u[((acc < np.exp(-u ** 2)) & (u <= u0)) | ((acc < np.exp(-u ** 2) / np.exp(u0 ** 2)) & (u > u0))]
+        return n * res[0] * vth
+        # else:
+        #     x = -x
+        #     p = p_zm(u0, x, a)
+        #     theta0 = np.arctan((u0 - x) / a)
+        #     res = []
+        #     while len(res) == 0:
+        #         R = np.random.rand(N)
+        #         theta = np.random.rand(N)
+        #         theta[R < p] = theta[R < p] * (theta0 + np.pi / 2.) - np.pi / 2
+        #         theta[R >= p] = theta[R >= p] * (np.pi / 2. - theta0) + theta0
+        #         # theta = np.random.rand(N)*np.pi - np.pi/2.
+        #         u = a * np.tan(theta) + x
+        #         # g = g_zm(u0, u, x, a)
+        #         acc = np.random.rand(N)
+        #         res = u[((acc < np.exp(-u ** 2)) & (u <= u0)) | ((acc < np.exp(-u ** 2) / np.exp(u0 ** 2)) & (u > u0))]
+        #     return -res[0] * vth
+
+
 
 
     # elif mode == 'fast':

@@ -8,7 +8,7 @@ from lyamc.general import *
 # p = Pool(28)
 
 geom = 'Zheng_sphere'
-params = [1., 2e4, 0.32, 0.5, 0.0, 0.0]
+params = [1., 2e4, 0.324, 0.0, 0.0, 0.0]
 
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
@@ -45,6 +45,14 @@ for i in range(N_nodes):
     os.system("sbatch temp.sh")
 
 
+
+###
+
+params = [1., 2e4, 0.0033, 0.0, 0.0, 0.0]
+x, k, direction, i = read_last(geom, params=params, mode='zm')
+
+params = [1., 2e4, 0.0033, 0.0, 0.0, 0.0]
+x2, k2, direction2, i2 = read_last(geom, params=params, mode='lookup')
 
 ###
 
@@ -90,7 +98,7 @@ geom = 'Zheng_sphere'
 # t = plt.hist(i[filt], bins, normed=False, cumulative=True, histtype='step', label='50')
 
 params = [1., 2e4, 0.33, 0.5, 0.0, 0.0]
-x, k, direction, i = read_last(geom, params=params)
+x, k, direction, i = read_last(geom, params=params, mode='zm')
 filt = np.abs(i) < 5000
 # t = plt.hist(i[filt], bins, normed=True, cumulative=True, histtype='step', label='50')
 

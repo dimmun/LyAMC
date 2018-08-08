@@ -92,7 +92,7 @@ def ddf(x):
     return np.interp(p_list, res, w_list)
 
 
-p = Pool(24)
+p = Pool(10)
 res = p.map(ddf, x_list)
 
 ltab = np.array(res)

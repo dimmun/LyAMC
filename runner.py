@@ -180,10 +180,10 @@ a_p_list = a_data['p_list']
 a_ltab = a_data['ltab']
 f_ltab = interpolate.interp2d(a_p_list, a_x_list, a_ltab, kind='linear', bounds_error=True)
 
-np.random.seed(4)
+# np.random.seed(10)
 
 for iii in range(nsim):
-    verbal = True
+    verbal = False
     p = geom.get_IC()
 
     local_temperature = geom.temperature(p)
@@ -193,7 +193,7 @@ for iii in range(nsim):
     x = np.random.normal(0, 1)  # * get_vth(local_temperature) / c
     x = 0
 
-    N = 100000000
+    N = 100000
 
     p_history = np.zeros([N, 3]) * np.nan
     p_history[0, :] = p
@@ -287,7 +287,7 @@ for iii in range(nsim):
     i_last.append(i + 1)
 
 filename = str(np.random.rand())[2:]
-np.savez('output/' + decodename(args.geometry[0], args.params) + '_%s_last.npz' % filename,
+np.savez('output/' + decodename(args.geometry[0], args.params) + '_%s_%s_last.npz' % (filename, args.randtype[0]),
          p=p_last,
          k=k_last,
          x=x_last,
