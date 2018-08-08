@@ -16,7 +16,7 @@ mode = 'zm'
 # params = [1e4, 10.]
 
 N_per_node = 28
-N_per_proc = 10
+N_per_proc = 100
 N_nodes = 10
 
 s = """#!/bin/bash
@@ -65,8 +65,8 @@ plt.show()
 bins = np.linspace(-25, 25, 100)
 
 geom = 'Zheng_sphere'
-params = [10., 2e4, 0.324, 0.25, 0.0, 0.0]
-x, k, direction = read_last(geom, params=params)
+params = [1., 2e4, 0.324, 0.5, 0.0, 0.0]
+x, k, direction, i = read_last(geom, params=params, mode='zm')
 filt = np.abs(direction) > 0
 t = plt.hist(direction[filt], 32, normed=True, histtype='step', label='200')
 
@@ -88,12 +88,12 @@ plt.show()
 
 
 
-dat00 = np.genfromtxt('R18_A0.00.dat', skip_header=2)
+dat00 = np.genfromtxt('R18_A0.25.dat', skip_header=2)
 dat05 = np.genfromtxt('R18_A0.50.dat', skip_header=2)
 
 
-bins = np.linspace(-1, 1, 256)
-bins = np.linspace(0, 1500000, 128)
+bins = np.linspace(-1, 1, 16)
+# bins = np.linspace(0, 1500000, 128)
 
 geom = 'Zheng_sphere'
 # params = [1., 2e4, 0.32, 0.5, 0.0, 0.0]
@@ -101,16 +101,24 @@ geom = 'Zheng_sphere'
 # filt = np.abs(i) < 150000
 # t = plt.hist(i[filt], bins, normed=False, cumulative=True, histtype='step', label='50')
 
-params = [1., 2e4, 0.33, 0.5, 0.0, 0.0]
+geom = 'Zheng_sphere'
+params = [1., 2e4, 0.324, 0.5, 0.0, 0.0]
 x, k, direction, i = read_last(geom, params=params, mode='zm')
-filt = np.abs(i) < 5000
-# t = plt.hist(i[filt], bins, normed=True, cumulative=True, histtype='step', label='50')
+filt = np.abs(i) < 5000000
+t = plt.hist(direction[filt], bins, normed=True, cumulative=False, histtype='step', label='50')
+
+geom = 'Zheng_sphere'
+params = [1., 2e4, 0.324, 0.25, 0.0, 0.0]
+x, k, direction, i = read_last(geom, params=params, mode='zm')
+filt = np.abs(i) < 5000000
+t = plt.hist(direction[filt], bins, normed=True, cumulative=False, histtype='step', label='50')
+
 
 filt = np.abs(dat00[:, 0]) < 1500000
-plt.hist(dat00[filt, 0], bins, histtype='step', cumulative=False, normed=True);
+plt.hist(dat00[filt, 2], bins, histtype='step', cumulative=False, normed=True);
 #
 filt = np.abs(dat05[:, 0]) < 1500000
-plt.hist(dat05[filt, 0], bins, histtype='step', cumulative=False, normed=True);
+plt.hist(dat05[filt, 2], bins, histtype='step', cumulative=False, normed=True);
 
 # filt = np.abs(dat05[:, 3]) > 0.0
 # plt.hist(dat05[filt, 0], bins, histtype='step', normed=True);
@@ -137,14 +145,14 @@ bins = np.linspace(-35, 15, 64)
 # t = plt.hist(direction[filt], 64, normed=True, histtype='step', label='200')
 
 geom = 'Zheng_sphere'
-params = [10., 1e4, 0.32, 0.0, 0.0, 200.05]
+params = [10., 2e4, 0.32, 0.0, 0.0, 200.0]
 # params = [10., 1e4, 1.17, 0.0, 0.0, 200.0]
-x, k, direction, i = read_last(geom, params=params)
+x, k, direction, i = read_last(geom, params=params, mode='zm')
 filt = np.abs(direction) > 0.9
 t = plt.hist(x[filt], bins, normed=True, histtype='step', label='100')
 
-filt = np.abs(dat[:, 3]) > 0.9
-plt.hist(dat[filt, 6], bins, histtype='step', normed=True);
+# filt = np.abs(dat[:, 3]) > 0.9
+# plt.hist(dat[filt, 6], bins, histtype='step', normed=True);
 
 # geom = 'Zheng_sphere'
 # params =  [10., 2e4, 0.324, 0.0, 0.0, 0.0]
@@ -154,7 +162,7 @@ plt.hist(dat[filt, 6], bins, histtype='step', normed=True);
 
 plt.show()
 
-plt.hist([i, dat[:, 0]], 100, histtype='step', normed=True)
+# plt.hist([i, dat[:, 0]], 100, histtype='step', normed=True)
 plt.show()
 ###
 
