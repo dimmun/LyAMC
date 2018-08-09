@@ -141,7 +141,7 @@ def get_par_velocity_of_atom(nu, T, u, n, f_ltab, mode='integral'):
         res = np.cumsum(res)
         res /= res[-1]
         r = np.random.rand()
-        print(r)
+        # print(r)
         return n * np.interp(r, res, w_list)
     elif mode == 'lookup':
         r = np.random.rand()
@@ -158,47 +158,34 @@ def get_par_velocity_of_atom(nu, T, u, n, f_ltab, mode='integral'):
         #     print(-f_ltab(r, -x))
         #     return n * -1. * f_ltab(r, -x) * vth
     elif mode == 'zm':
-        N = 1000
+        N = 10
         x = get_x(nu, T)
         vth = get_vth(T)
-        u0 = np.dot(u, n) / vth
+        upar = np.dot(u, n)[0] / vth
         a = 4.7e-4 * (T / 1e4) ** -0.5
-        if x > 0:
-            p = p_zm(u0, x, a)
-            theta0 = np.arctan((u0 - x) / a)
-            res = []
-            while len(res) == 0:
-                print('more')
-                R = np.random.rand(N)
-                theta = np.random.rand(N)
-                theta[R < p] = theta[R < p] * (theta0 + np.pi / 2.) - np.pi / 2
-                theta[R >= p] = theta[R >= p] * (np.pi / 2. - theta0) + theta0
-                # theta = np.random.rand(N)*np.pi - np.pi/2.
-                u = a * np.tan(theta) + x
-                # g = g_zm(u0, u, x, a)
-                acc = np.random.rand(N)
-                res = u[((acc < np.exp(-u ** 2)) & (u <= u0)) | ((acc < np.exp(-u ** 2) / np.exp(u0 ** 2)) & (u > u0))]
-            return n * res[0] * vth
-        else:
+        if x < 0:
             x = -x
-            u0 = -u0
-            vth = get_vth(T)
-            u0 = np.dot(u, n) / vth
-            p = p_zm(u0, x, a)
-            theta0 = np.arctan((u0 - x) / a)
-            res = []
-            while len(res) == 0:
-                print('more1', x, u0)
-                R = np.random.rand(N)
-                theta = np.random.rand(N)
-                theta[R < p] = theta[R < p] * (theta0 + np.pi / 2.) - np.pi / 2
-                theta[R >= p] = theta[R >= p] * (np.pi / 2. - theta0) + theta0
-                # theta = np.random.rand(N)*np.pi - np.pi/2.
-                u = a * np.tan(theta) + x
-                # g = g_zm(u0, u, x, a)
-                acc = np.random.rand(N)
-                res = u[((acc < np.exp(-u ** 2)) & (u <= u0)) | ((acc < np.exp(-u ** 2) / np.exp(u0 ** 2)) & (u > u0))]
+            upar = -upar
+        u0 = upar/200
+        p = p_zm(u0, x, a)
+        theta0 = np.arctan((u0 - x) / a)
+        res = []
+        while len(res) == 0:
+            print('more', x, u0)
+            R = np.random.rand(N)
+            theta = np.random.rand(N)
+            theta[R < p] = theta[R < p] * (theta0 + np.pi / 2.) - np.pi / 2
+            theta[R >= p] = theta[R >= p] * (np.pi / 2. - theta0) + theta0
+            # theta = np.random.rand(N)*np.pi - np.pi/2.
+            uu = a * np.tan(theta) + x
+            # g = g_zm(u0, u, x, a)
+            acc = np.random.rand(N)
+            res = uu[((acc < np.exp(-uu ** 2)) & (uu <= u0)) | ((acc < (np.exp(-uu ** 2) / np.exp(-u0 ** 2))) & (uu > u0))]
+            if N<1e7: N *= 10
+        if x < 0:
             return -n * res[0] * vth
+        else:
+            return n * res[0] * vth
 
 
 

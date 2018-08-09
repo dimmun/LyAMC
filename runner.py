@@ -193,7 +193,7 @@ for iii in range(nsim):
     x = np.random.normal(0, 1)  # * get_vth(local_temperature) / c
     x = 0
 
-    N = 2000000
+    N = 10000
 
     p_history = np.zeros([N, 3]) * np.nan
     p_history[0, :] = p
@@ -216,7 +216,7 @@ for iii in range(nsim):
         # d = np.linspace()
         i += 1
         if verbal:
-            if i % 1 == 0:
+            if i % 1000 == 0:
                 print(i, d_absorbed, x, np.sqrt(p[0] ** 2 + p[1] ** 2 + p[2] ** 2))
         # define initial parameters
         p = p_history[i, :].copy()  # position
