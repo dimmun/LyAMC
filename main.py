@@ -12,11 +12,11 @@ from lyamc.general import *
 
 geom = 'Zheng_sphere'
 params = [1., 2e4, 3.24, 0.0, 0.0, 200.0]
-mode = 'zm'
+mode = 'integral'
 # geom = 'Neufeld_test'
 # params = [1e4, 10.]
 
-N_per_node = 12
+N_per_node = 28
 N_per_proc = 10
 N_nodes = 10
 
