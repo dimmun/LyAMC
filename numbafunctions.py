@@ -42,7 +42,7 @@ def rotation_matrix(axis, theta):
     Return the rotation matrix associated with counterclockwise rotation about
     the given axis by theta radians.
     """
-    axis = axis / numba_norm(axis)
+    axis /= numba_norm(axis)
     a = np.cos(theta / 2.0)
     b, c, d = -axis * np.sin(theta / 2.0)
     aa, bb, cc, dd = a * a, b * b, c * c, d * d
