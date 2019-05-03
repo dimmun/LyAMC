@@ -241,7 +241,6 @@ def get_scattering_cell(x, tau, k, cell):
         tau -= 0.5 * (f + fprevious) * ds
         # Ntau += 1
         #print("Ntau =", Ntau, "s =", s, "tau =", tau, "xlocal =",  xlocal)
-        #print(numba_dot(vbulk / vth, k), np.dot(vbulk / vth, k))
     escaped = False
     cell = Cell(position0 + (s - 0.5 * ds) * k)
     return cell, escaped
